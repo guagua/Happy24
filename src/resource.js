@@ -8,3 +8,7 @@ var g_resources = [];
 for (var i in res) {
     g_resources.push(res[i]);
 }
+
+var BOX_WIDTH = 170;
+
+var TARGET_NUM = 24;
