@@ -25,9 +25,6 @@ var GameInitLayer = cc.LayerColor.extend({
         itemStart.setCallback(this.onClickStart, this);
         itemSetting.setCallback(this.onClickSetting, this);
         itemAchieve.setCallback(this.onClickAchieve, this);
-        
-        //背景音乐
-        cc.AudioEngine.getInstance().playMusic(res.bg_mp3, true);
     },
     onClickStart:function() {
     	cc.director.runScene(new GameSelectScene());

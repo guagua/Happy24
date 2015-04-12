@@ -11,7 +11,6 @@ var createLabelImageItem = function(normalRes, clickRes, disableRes, contentSize
 	normalSpr.setContentSize(contentSize);
 	clickSpr.setAnchorPoint(0.5, 0.5);
 	clickSpr.setContentSize(contentSize);
-	cc.log("%s", labelColor);
 	var normalLabel = createLabelTTF(labelStr, labelFont, labelSize, labelColor);
 	var clickLabel = createLabelTTF(labelStr, labelFont, labelSize, labelColor);
 	normalLabel.setPosition(cc.p(contentSize.width*0.5,contentSize.height*0.5));
@@ -29,7 +28,6 @@ var createLabelTTF = function(str, font, size, color) {
 	if (str == null) str = "";
 	if (size == null) size = 10;
 	if (font == null) font = "微软雅黑";
-	cc.log("%s", color);
 	if (color == null) color = cc.color(255, 255, 255, 1);
 	var label = new cc.LabelTTF(str, font, size);
 	label.setColor(color);
