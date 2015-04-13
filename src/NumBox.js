@@ -1,13 +1,13 @@
 var NumBox = cc.Sprite.extend({
 	numLabel:null,//数字显示
 	draw:null,
-	State:0,//所处的状态   选中，待选 ，   已选
+	State:STATE_INIT,//所处的状态   选中，待选 ，   已选
 	colorArr:null,
 	num:null,//所显示的数字
 	ctor:function (num) {
-
 		this._super();	
 		this.size = cc.winSize;
+		if (num == null) num = 0;
 		this.num = num;
 		
 		this.numLabel = new cc.LabelTTF(this.num, "微软雅黑", 50);
@@ -36,6 +36,12 @@ var NumBox = cc.Sprite.extend({
 	setNum:function(num){	
 		this.num = num;
 		this.numLabel.setString(num);
+	},
+	getNum:function() {
+		return this.num;
+	},
+	getState:function() {
+		return this.State;
 	},
 	setState:function(_State){
 		this.State=_State;

@@ -17,6 +17,8 @@
     "src/GameScene.js",
     "src/NumBox.js",
     "src/CalBox.js",
-    "src/util/DisplayUtil.js"
+    "src/util/DisplayUtil.js",
+    "src/util/CalUtil.js",
+    "src/util/LocalStorage.js"
   ]
 }

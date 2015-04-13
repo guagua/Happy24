@@ -1,6 +1,7 @@
 
 var GameSelectLayer = cc.LayerColor.extend({
 	startLabel:null,
+	mainBtn:null,
 	bgFirst:null,
 	bgSecond:null,
 	bgThird:null,
@@ -15,6 +16,14 @@ var GameSelectLayer = cc.LayerColor.extend({
 		this.startLabel.setColor(cc.color(255, 255, 0, 1));
 		this.startLabel.setPosition(this.size.width/2, this.size.height-50);
 		this.addChild(this.startLabel, 1);
+		
+		var menuMain = new cc.Menu();
+		this.addChild(menuMain, 2);
+		menuMain.setPosition(0, 0);
+		this.mainBtn = createLabelImageItem(res.btn_bg_normal, res.btn_bg_click, null, cc.size(192, 61), "返回", null, 25);
+		menuMain.addChild(this.mainBtn, 2);
+		this.mainBtn.setCallback(this.returnToMain, this);
+		this.mainBtn.setPosition(150, 50);
 		
 		this.container = new cc.Node();
 		this.addChild(this.container, 0);
@@ -32,14 +41,14 @@ var GameSelectLayer = cc.LayerColor.extend({
 		this.container.addChild(this.bgSecond, 0, 2);
 		this.container.addChild(this.bgThird, 0, 3);
 		
-		var menu = new cc.Menu();
+		var menuSelect = new cc.Menu();
 		for (var i = 0; i < 100; i++) {
 			var item = createLabelImageItem(res.btn_bg_normal, res.btn_bg_click, null, cc.size(192, 61), "第" + (i+1) + "关", null, 25);
-			menu.addChild(item, 0, i);
+			menuSelect.addChild(item, 0, i);
 			item.setPosition(0, i * 500);
 			item.setCallback(this.onClickStart, this);
 		}
-		this.container.addChild(menu, 1);
+		this.container.addChild(menuSelect, 1);
 		
 		// 添加点击监听
 		cc.eventManager.addListener({
@@ -51,8 +60,14 @@ var GameSelectLayer = cc.LayerColor.extend({
 
 	},
 	
-	onClickStart:function() {
-		cc.director.runScene(new GameScene());
+	returnToMain:function() {
+		cc.director.runScene(new GameInitScene());
+	},
+	
+	onClickStart:function(item) {
+		var tag = item.getTag();
+		cc.log("tag:%d", tag);
+		cc.director.runScene(new GameScene(tag));
 	},
 	
 	onToucheMoved:function(touches, event){
@@ -62,6 +77,7 @@ var GameSelectLayer = cc.LayerColor.extend({
 		this.moveY = location.y - this.startY; 
 		var currentPos = this.container.getPosition();
 		var containerY = currentPos.y + this.moveY;
+		if (containerY > 0) return;
 		this.container.setPositionY(containerY);
 		this.startY = location.y;
 		 

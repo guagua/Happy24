@@ -12,8 +12,13 @@ for (var i in res) {
 
 var BOX_WIDTH = 170;
 
-var TARGET_NUM = 24;
+var TARGET_NUMBER = 24;
+var MAX_NUMBER = 4;
 
 var SELECT_BG_WIDTH = 640;
 
 var SELECT_BG_HEIGHT = 960;
+
+var STATE_INIT = 0;
+var STATE_SELECT = 1;
+var STATE_DONE = 2;
