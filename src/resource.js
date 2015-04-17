@@ -3,6 +3,7 @@ var res = {
 		btn_bg_click : "res/btn_bg_s.png",
 		select_bg : "res/selectBg.jpg",
 		bg_mp3 : "res/bg.mp3",
+		rank_bg_png:"res/rank_bg.png"
 };
 
 var g_resources = [];

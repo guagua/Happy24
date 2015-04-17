@@ -1,10 +1,18 @@
 
-var GameInitLayer = cc.LayerColor.extend({
+var GameInitLayer = cc.Layer.extend({
     startLabel:null,
+    ranklayer:null,//排行榜
     itemString:["开始游戏", "设置", "查看成就"],
     init:function () {
         this._super();
         this.size = cc.winSize;
+        
+        var layerbg=new cc.LayerColor(cc.color(100,67,245,255),this.size.width,this.size.height);   
+        this.addChild(layerbg, 0);
+        
+        this.ranklayer=new RankLayer();
+        this.addChild(this.ranklayer,100);
+        
         this.startLabel = createLabelTTF("欢乐24点", "微软雅黑", 50);
         this.startLabel.setAnchorPoint(0.5, 0.5)
         this.startLabel.setColor(cc.color(255, 255, 0, 1));
@@ -34,6 +42,9 @@ var GameInitLayer = cc.LayerColor.extend({
     },
     onClickAchieve:function() {
     	//弹出排行榜
+    this.ranklayer.onRankshow();
+ 	
+    	
     }
 });
 

@@ -1,5 +1,5 @@
 
-var GameSelectLayer = cc.LayerColor.extend({
+var GameSelectLayer = cc.Layer.extend({
 	startLabel:null,
 	mainBtn:null,
 	bgFirst:null,
@@ -11,6 +11,10 @@ var GameSelectLayer = cc.LayerColor.extend({
 	init:function () {
 		this._super();
 		this.size = cc.winSize;
+		
+		var layerbg=new cc.LayerColor(cc.color(100,67,245,255),this.size.width,this.size.height);   
+		this.addChild(layerbg, 0);
+		
 		this.startLabel = new cc.LabelTTF("选择关卡，点击开始", "微软雅黑", 50);
 		this.startLabel.setAnchorPoint(0.5, 0.5)
 		this.startLabel.setColor(cc.color(255, 255, 0, 1));
