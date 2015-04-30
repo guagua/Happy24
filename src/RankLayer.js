@@ -80,11 +80,12 @@ var RankLayer = cc.Layer.extend({
 		this.visible=false;		
 		//this._gameLayer.onShopBack();		
 	},
-	onExit:function(){
-		this._super();
-		this.release();
-	},
+//	onExit:function(){
+//		this._super();
+//		this.release();
+//	},
 	getrank:function(callback,showitem) {
+		this.pomelo=window.pomelo;
 		var route = 'connector.entryHandler.getrank';
 		this.pomelo.init({
 			//host: window.location.hostname,

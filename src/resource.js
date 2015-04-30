@@ -3,7 +3,14 @@ var res = {
 		btn_bg_click : "res/btn_bg_s.png",
 		select_bg : "res/selectBg.jpg",
 		bg_mp3 : "res/bg.mp3",
-		rank_bg_png:"res/rank_bg.png"
+		rank_bg_png:"res/rank_bg.png",
+		//l1_bg_png:"res/hz/l1_bg.png",
+		gameStartNormal_png:"res/hz/gameStartNormal.png",
+		gameStartSelect_png:"res/hz/gameStartSelect.png"
+		
+		
+		
+		
 };
 
 var g_resources = [];
