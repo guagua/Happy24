@@ -80,10 +80,17 @@ var RankLayer = cc.Layer.extend({
 		this.visible=false;		
 		//this._gameLayer.onShopBack();		
 	},
+<<<<<<< Updated upstream
 //	onExit:function(){
 //		this._super();
 //		this.release();
 //	},
+=======
+	onExit:function(){
+		this._super();
+//		this.release();
+	},
+>>>>>>> Stashed changes
 	getrank:function(callback,showitem) {
 		this.pomelo=window.pomelo;
 		var route = 'connector.entryHandler.getrank';

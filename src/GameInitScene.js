@@ -87,11 +87,22 @@ var GameInitLayer = cc.Layer.extend({
 //        itemAchieve.setCallback(this.onClickAchieve, this);
     },
     onClickStart:function() {
+<<<<<<< Updated upstream
     	//增加场景切换效果（可适当更改）
     	var scene = new cc.Scene();
     	scene.addChild(new GameSelectScene());
     	cc.director.runScene(new cc.TransitionFade(1.2,scene));	
     	//cc.director.runScene(new GameSelectScene());
+=======
+    	cc.director.runScene(new GameSelectScene());
+    },
+    onClickSetting:function() {
+    	//弹出设置页面层
+    },
+    onClickAchieve:function() {
+    	// 弹出排行榜
+    	this.ranklayer.onRankshow();
+>>>>>>> Stashed changes
     }
 //    onClickSetting:function() {
 //    	//弹出设置页面层
