@@ -117,7 +117,7 @@ var GameSelectLayer = cc.Layer.extend({
 		var checkpoints=this.gamecheckpoints=[];
 		
 		//所在关卡 暂时先设0
-		testgamelevel=80;
+		testgamelevel=getCurrentLevel();
 		
 		
 		checkpoints[0]=new Checkpoint(0,true,size.width/2,size.height/3);

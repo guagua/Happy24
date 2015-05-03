@@ -8,6 +8,8 @@ var GameInitLayer = cc.Layer.extend({
         
         var size = cc.winSize;
         
+        initLevelNum();
+        
         //设置背景图案
         var layerbg = new cc.Sprite("res/hz/game_bg.png");
         layerbg.attr({

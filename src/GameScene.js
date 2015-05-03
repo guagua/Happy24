@@ -8,7 +8,6 @@ var GameLayer = cc.Layer.extend({
 	calNum:-1,			//当前的计算符号
 	undoBtn:null,		//撤销按钮
 	resetBtn:null,		//重置按钮
-	numList:null,		//题目集合
 	guankaNum:0,		//当前关卡
 	resetFlag:false,	//是否进入下一关
 	firstPic:-1,		//第一个选择的数字
@@ -27,17 +26,6 @@ var GameLayer = cc.Layer.extend({
 		this.resetFlag = false;
 		this.numArr = [];
 		this.stateArr = [];
-		this.numList = 
-			[6, 6, 6, 6,
-			 1, 2, 3, 4, 
-			 1, 1, 12, 12, 
-			 3, 5, 6, 8,
-			 1, 3, 5, 6,
-			 2, 2, 7, 13,
-			 4, 5, 3, 12,
-			 7, 8, 9, 4,
-			 13, 8, 9, 6,
-			 1, 5, 5, 5];
 	},
 	
 	init:function (level) {
@@ -117,7 +105,7 @@ var GameLayer = cc.Layer.extend({
 	
 	showTip:function() {
 		canCalc(this.numArr[0], this.numArr[1], this.numArr[2], this.numArr[3], TARGET_NUMBER);
-		this.resultLabel.setString(tipString);
+		this.resultLabel.setString(CU.tipString);
 	},
 	
 	undoClick:function() {
@@ -147,7 +135,7 @@ var GameLayer = cc.Layer.extend({
 		
 		for(var i=0;i<4;i++){
 			if(cc.rectContainsPoint(this.calBoxArr[i].getBoundingBox(),location))	
-			{ 
+			{
 				this.calNum = i;
 				this.closeCalcItem();
 				return;
@@ -263,18 +251,12 @@ var GameLayer = cc.Layer.extend({
 		this.gameStep = 0;
 		this.numArr = [];
 		this.stateArr = [];
+		var tempArr = CU.levelNum[this.guankaNum];
 		for (var i = 0; i < 4; i++) {
-			if (this.guankaNum >= 10) {
-				this.randNums();
-				this.numBoxArr[i].setNum(this.numList[i]);
-				this.numArr.push(this.numList[i]);
-				this.startLabel.setString("随机关卡，难度不定");
-			} else {
-				var result = "关卡:" + (this.guankaNum+1) +  "难度系数:" + this.guankaNum * 10;
-				this.startLabel.setString(result);
-				this.numBoxArr[i].setNum(this.numList[4 * this.guankaNum + i]);
-				this.numArr.push(this.numList[4 * this.guankaNum + i]);
-			}
+			var result = "关卡:" + (this.guankaNum) +  "  难度系数:" + tempArr[0];
+			this.startLabel.setString(result);
+			this.numBoxArr[i].setNum(tempArr[i+1]);
+			this.numArr.push(tempArr[i+1]);
 			this.stateArr.push(STATE_INIT);
 			this.numBoxArr[i].setState(STATE_INIT);
 			this.closeCalcItem();
@@ -309,7 +291,7 @@ var GameLayer = cc.Layer.extend({
 		
 		for(var i=0;i<4;i++){
 			if(cc.rectContainsPoint(this.calBoxArr[i].getBoundingBox(),location))	
-			{ 
+			{
 				this.calNum = i;
 				this.closeCalcItem();
 				return true;
@@ -369,6 +351,7 @@ var GameLayer = cc.Layer.extend({
 	},
 	
 	nextGame:function() {
+		setCurrentLevel(this.guankaNum);
 		this.resetWithGuanka(this.guankaNum + 1);
 	},
 	
