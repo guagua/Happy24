@@ -100,6 +100,11 @@ var SettingLayer = cc.Layer.extend({
 		);
 		switchControl.x = white_bg.getBoundingBox().width*2/3;
 		switchControl.y = white_bg.getBoundingBox().height*5/6;
+		if (getIsPlayMusic()) {
+			switchControl.setOn(true, false);
+		} else {
+			switchControl.setOn(false, false);
+		}
 		white_bg.addChild(switchControl);
 		
 		
@@ -173,15 +178,13 @@ var SettingLayer = cc.Layer.extend({
 	valueChanged:function (sender, controlEvent) {
 		if (sender.isOn()) {
 			//this._displayValueLabel.setString("On");
-
-		
-
+			setIsPlayMusic(1);
+			cc.audioEngine.playMusic(res.bg_mp3, true);
 		}
 		else {
 			//this._displayValueLabel.setString("Off");
-
-			
-
+			setIsPlayMusic(0);
+			cc.audioEngine.stopMusic(true);
 		}
 	
 	},

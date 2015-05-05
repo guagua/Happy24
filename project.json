@@ -22,6 +22,7 @@
         "src/util/LocalStorage.js",
         "src/util/pomelo-cocos2d-js.js",
         "src/RankLayer.js",
-        "src/SettingLayer.js"
+        "src/SettingLayer.js",
+        "src/WinScene.js"
     ]
 }
