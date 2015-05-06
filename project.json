@@ -23,7 +23,11 @@
         "src/util/pomelo-cocos2d-js.js",
         "src/RankLayer.js",
         "src/SettingLayer.js",
+        "src/AboutLayer.js",
         "src/WinScene.js",
-        "src/AboutLayer.js"
+        "src/PauseLayer.js",
+        "src/Numbtn.js",
+        "src/GlobalVars.js",
+        "src/Sound.js"
     ]
 }

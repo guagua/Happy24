@@ -6,25 +6,25 @@ var GameSelectLayer = cc.Layer.extend({
 //	bgSecond:null,
 //	bgThird:null,
 //	container:null,
-	startY:0,
-	moveY:0,
+	//startY:0,
+	//moveY:0,
 	
 	gamecheckpoints:null,
 	mapnode:null,
+	_SettingLayer:null,
 	init:function () {
 		this._super();
 		
 		var size = cc.winSize;
 		
-		
-
-		
-		
-		
+        //屏幕顶部半透明浮层
 		var gamecontrol_bg=new cc.LayerColor(cc.color(255,255,255,150),size.width,100);  
 		gamecontrol_bg.y=size.height-100;
 		this.addChild(gamecontrol_bg, 10);
 		
+		
+		
+		//标题
 		var map_titlesprite = new cc.Sprite("res/hz/map_title.png");
 		map_titlesprite.attr({
 			x: 0,
@@ -37,7 +37,7 @@ var GameSelectLayer = cc.Layer.extend({
 		
 		
 		
-		
+		//log
 		var logo_bigsprite = new cc.Sprite("res/hz/logo_big.png");
 		logo_bigsprite.attr({
 			x: 0,
@@ -48,7 +48,7 @@ var GameSelectLayer = cc.Layer.extend({
 		});
 		gamecontrol_bg.addChild(logo_bigsprite);  
 		
-		//添加随机模式按钮
+		//添加设置按钮
 		var settingsitem1 = new cc.MenuItemImage(
 				"res/hz/settings.png",
 				"res/hz/settings.png",
@@ -65,20 +65,7 @@ var GameSelectLayer = cc.Layer.extend({
 		settingsmenu.y = 0;	
 		gamecontrol_bg.addChild(settingsmenu,1);
 		
-		
-		
-//		var settingssprite = new cc.Sprite("res/hz/settings.png");
-//		settingssprite.attr({
-//			x: size.width-5,
-//			y: 50,
-//			anchorX: 1,
-//			anchorY: 0.5,
-//			scale: 1
-//		});
-//		gamecontrol_bg.addChild(settingssprite);  
-		
-		
-		
+
 		//添加随机模式按钮
 		var item1 = new cc.MenuItemImage(
 				"res/hz/random_btn.png",
@@ -96,11 +83,6 @@ var GameSelectLayer = cc.Layer.extend({
 		menu.y = 0;	
 		this.addChild(menu,1);
 		
-		
-		
-		
-		this.mapnode=new cc.Node();
-		this.addChild(this.mapnode);
 		//设置背景图案
 		var layerbg = new cc.Sprite("res/hz/game_bg.png");
 		layerbg.attr({
@@ -112,27 +94,33 @@ var GameSelectLayer = cc.Layer.extend({
 		});
 		this.addChild(layerbg,-1); 
 		
-
+		//地图基点
+		this.mapnode=new cc.Node();
+		this.addChild(this.mapnode);
 		
+		//各点坐标集合
 		var checkpoints=this.gamecheckpoints=[];
 		
-		//所在关卡 暂时先设0
-		testgamelevel=getCurrentLevel();
+		//当前所在关卡
+		var testgamelevel=GV.getCurrentLevel();
+		
+		//判断地图应该加载哪一层级  如0-100 101-200 201-300
+		var maplevel=Math.floor(testgamelevel/100);
 		
 		
-		checkpoints[0]=new Checkpoint(0,true,size.width/2,size.height/3);
-		
+		//设置第一点   （后续点坐标由第一点开始䢑代生成）
+		checkpoints[0]=new Checkpoint(0,maplevel,true,size.width/2,size.height/3);
 		this.mapnode.addChild(checkpoints[0],8)
 		
 		
-		
+		//生成后续点
 		for(var i=1;i<=100;i++)
 		{
 		var islock=false;
-		if(i<=testgamelevel)
+		if(i+maplevel*100<=testgamelevel)
 			islock=true;
 		
-		checkpoints[i]=new Checkpoint(i,islock,checkpoints[i-1]._point.x,checkpoints[i-1]._point.y);
+		checkpoints[i]=new Checkpoint(i,maplevel,islock,checkpoints[i-1]._point.x,checkpoints[i-1]._point.y);
 			
 		//checkpoints[i].setPosition(cc.pAdd(checkpoints[i-1].getPosition(),checkpoints[i-1]._point));
 		
@@ -141,7 +129,7 @@ var GameSelectLayer = cc.Layer.extend({
 			
 		}
 		
-		
+		//所在点 笑脸标签
 		var mansprite = new cc.Sprite("res/hz/gameplay_node_current.png");
 		mansprite.attr({
 			x: checkpoints[testgamelevel].x,
@@ -153,6 +141,7 @@ var GameSelectLayer = cc.Layer.extend({
 		this.mapnode.addChild(mansprite,9); 
 		
 		
+		//设置当前所闯关卡在屏幕当中显示
 		this.mapnode.y=-checkpoints[testgamelevel].y+size.height/3;
 		
 //		this.size = cc.winSize;
@@ -202,34 +191,47 @@ var GameSelectLayer = cc.Layer.extend({
 		// 添加点击监听
 		cc.eventManager.addListener({
 			event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-			onTouchesBegan: this.onTouchBegan.bind(this),
-			onTouchesMoved: this.onToucheMoved.bind(this),
-			onTouchesEnded: this.onTouchEnded.bind(this)
+			onTouchesBegan: this.onTouchBegan.bind(this)
+			//onTouchesMoved: this.onToucheMoved.bind(this),
+			//onTouchesEnded: this.onTouchEnded.bind(this)
 		}, this); 
 		
 
 	},
 	
-	returnToMain:function() {
-		cc.director.runScene(new GameInitScene());
-	},
-	
+//	returnToMain:function() {
+//		cc.director.runScene(new GameInitScene());
+//	},
+//	
 	onClickStart:function(item) {
 		var tag = item.getTag();
 		cc.log("tag:%d", tag);
-		cc.director.runScene(new GameScene(tag));
+		//cc.director.runScene(new GameScene(tag));
 	},
-	onClickSettings:function() {
-		//var tag = item.getTag();
-		//cc.log("tag:%d", tag);
-		var sett=new SettingLayer();
-		this.addChild(sett,100);
-		 
+	onClickSettings:function() {		
+			if(this._SettingLayer)
+			{
+				if(!this._SettingLayer.Visible)
+					{
+					this._SettingLayer.setVisible(true);
+					//暂停页面按钮功能   
+					cc.eventManager.pauseTarget(this, true);
+					//开启设置层按钮功能
+					cc.eventManager.resumeTarget(this._SettingLayer,true);
+					}
+			}
+			else
+			{
+				//暂停页面已存按钮功能
+				cc.eventManager.pauseTarget(this, true);
+				
+				this._SettingLayer=new SettingLayer();
+				this.addChild(this._SettingLayer,100);
+				
+			}
 	},
 	
-	
-	
-	
+
 	onToucheMoved:function(touches, event){
 		cc.log("move:")
 		var size = cc.winSize;
@@ -242,12 +244,7 @@ var GameSelectLayer = cc.Layer.extend({
 		//||containerY<-this.gamecheckpoints[testgamelevel].y-size.height
 		if (containerY > 0||containerY<-this.gamecheckpoints[testgamelevel].y-size.height/2) 
 			return;
-
-		
-		
-		
-		
-		
+	
 		this.mapnode.y=containerY;
 		this.startY = location.y;
 		
@@ -335,24 +332,22 @@ var GameSelectLayer = cc.Layer.extend({
 		cc.log("begin:")
 		var touch = touches[0];
 		var location = touch.getLocation();
-		this.startY = location.y;
+		//this.startY = location.y;
 		
-		this.mapnode
+		//this.mapnode
 		for(var i=0;i<=100;i++)
 		{
 			if(cc.pDistance(this.mapnode.convertToWorldSpace(this.gamecheckpoints[i].getPosition()),location)<=65)
 			{
 				
+				if(this.gamecheckpoints[i]._num==GV.getCurrentLevel())
 				cc.director.runScene(new GameScene(i));
 				
 				return false;
 			}
 			
 		}
-		
-		
-		
-		
+			
 		
 	}
 });
@@ -367,24 +362,20 @@ var GameSelectScene = cc.Scene.extend({
 });
 
 
-
-
-
-
 //关卡
-var leftorright=true;
+var Checkpoint_leftorright=true;
 var Checkpoint = cc.Sprite.extend({
 	_State:true,//所处的状态   lock or unlock
 	_num:null,//第几关
 	_xian:null,//上端的线
 	_point:null,//上面圈的位置
-	ctor:function (num,state,pointx,pointy) {
+	ctor:function (num,maplevel,state,pointx,pointy) {
 
 		//this._super();	
 		var size = cc.winSize;
 
 		this._State=state;
-		this._num=num;
+		this._num=num+maplevel*100;
 		
 		
 		   if(state)
@@ -397,7 +388,7 @@ var Checkpoint = cc.Sprite.extend({
 		   this.x=pointx;
 		   this.y=pointy;
  
-		   var MyLabel = new cc.LabelTTF("第" + num + "关", "微软雅黑",25);
+		   var MyLabel = new cc.LabelTTF("第" + this._num + "关", "微软雅黑",25);
 		    MyLabel .attr({
 			x: this.width/2,
 			y: this.height+5,
@@ -409,7 +400,7 @@ var Checkpoint = cc.Sprite.extend({
 		  this.addChild(MyLabel,1);
 		  
 		      //小于最大关数
-		      if(this._num<100)
+		  if(this._num<(maplevel+1)*100)
 			  { 
 		    	  //放置线
 		    	  this._xian = new cc.Sprite();
@@ -417,7 +408,7 @@ var Checkpoint = cc.Sprite.extend({
 		    	  this._xian.setContentSize(cc.size(5,xianheight));
 		    	  this._xian.setTextureRect(cc.rect(0, 0, 5, xianheight));
 		    	  var pcolor;
-		    	  if(this._num<testgamelevel){
+		    	  if(this._num<GV.CURRENT_LEVEL){
 		    		  pcolor =cc.color(238,79,54);  
 		    	  }else {
 		    		  pcolor =cc.color(157,159,163);
@@ -426,14 +417,14 @@ var Checkpoint = cc.Sprite.extend({
 		    	  
 		    	  var roundnum= Math.round(Math.random()*15+15);
 		    	  	
-		    	   if(!leftorright)
+		    	  if(!Checkpoint_leftorright)
 		    		{
 		    		   roundnum=-roundnum;
 		    		   
-		    		   leftorright=true;
+		    		   Checkpoint_leftorright=true;
 		    		}else
 		    			{
-		    		  leftorright=false;
+		    			Checkpoint_leftorright=false;
 		    			}
 		    	   
 		    	   
@@ -456,10 +447,10 @@ var Checkpoint = cc.Sprite.extend({
 		    		  this._xian.setRotation(roundnum);
 		    		  //this._xian.rotation=-roundnum;
 		    		  px=this.x+xianheight*Math.sin(2*Math.PI/360*roundnum);
-		    		  if(leftorright) 
-		    		  leftorright=false;
+		    		  if(Checkpoint_leftorright) 
+		    			  Checkpoint_leftorright=false;
 		    		  else
-		    		  leftorright=true;  
+		    			  Checkpoint_leftorright=true;  
 		    	  }
 
 		    	

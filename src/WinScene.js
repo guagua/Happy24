@@ -45,7 +45,7 @@ var WinLayer = cc.Layer.extend({
 		this.addChild(menu,1);
 	},
 	onContinue:function() {
-		cc.director.runScene(new GameScene(getCurrentLevel() + 1));
+		cc.director.runScene(new GameScene(GV.getCurrentLevel()));
 	},
 	onBackToMain:function() {
 		cc.director.runScene(new GameSelectScene());

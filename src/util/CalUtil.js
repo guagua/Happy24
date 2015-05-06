@@ -1,4 +1,4 @@
-var CU = {};
+var CU = CU || {};
 CU.tipString = "11";
 CU.hardNum = 0;
 CU.allNums = {};

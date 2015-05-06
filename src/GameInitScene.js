@@ -94,14 +94,16 @@ var GameInitLayer = cc.Layer.extend({
     	scene.addChild(new GameSelectScene());
     	cc.director.runScene(new cc.TransitionFade(1.2,scene));	
 //    	cc.director.runScene(new GameSelectScene());
-    },
-    onClickSetting:function() {
-    	//弹出设置页面层
-    },
-    onClickAchieve:function() {
-    	// 弹出排行榜
-    	this.ranklayer.onRankshow();
     }
+//    onClickSetting:function() {
+//    	//弹出设置页面层
+//    	
+//    	
+//    },
+//    onClickAchieve:function() {
+//    	// 弹出排行榜
+//    	//this.ranklayer.onRankshow();
+//    }
 });
 
 var GameInitScene = cc.Scene.extend({

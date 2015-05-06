@@ -62,9 +62,7 @@ cc.game.onStart = function(){
     cc.LoaderScene.preload(g_resources, function () {
     	cc.director.runScene(new GameInitScene());
     	//背景音乐
-    	if (getIsPlayMusic() == 1) { 
-    		cc.audioEngine.playMusic(res.bg_mp3, true);
-    	}
+    Sound.getInstance().playBg();
     }, this);
 };
 cc.game.run();
