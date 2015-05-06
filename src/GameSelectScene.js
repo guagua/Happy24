@@ -224,7 +224,7 @@ var GameSelectLayer = cc.Layer.extend({
 		//cc.log("tag:%d", tag);
 		var sett=new SettingLayer();
 		this.addChild(sett,100);
-		
+		 
 	},
 	
 	

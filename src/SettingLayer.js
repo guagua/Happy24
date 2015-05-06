@@ -100,7 +100,7 @@ var SettingLayer = cc.Layer.extend({
 		);
 		switchControl.x = white_bg.getBoundingBox().width*2/3;
 		switchControl.y = white_bg.getBoundingBox().height*5/6;
-		if (getIsPlayMusic()) {
+		if (getIsPlayMusic()==1) {
 			switchControl.setOn(true, false);
 		} else {
 			switchControl.setOn(false, false);
@@ -159,7 +159,7 @@ var SettingLayer = cc.Layer.extend({
 		var aboutitem1 = new cc.MenuItemImage(
 				"res/hz/about_us_btn.png",
 				"res/hz/about_us_btn.png",
-				this.closeSetting,this
+				this.aboutClick,this
 		);
 
 		aboutitem1.x=white_bg.getBoundingBox().width/2;	
@@ -202,10 +202,13 @@ var SettingLayer = cc.Layer.extend({
 	},
 	
 	closeSetting:function () {
-		this.visible=false;	
-	}
+		this.removeFromParent(true);
+	},
 		
-		
+	aboutClick:function () {
+		var aboutLayer = new AboutLayer();
+		this.addChild(aboutLayer, 300);
+	}	
 		
 		
 		
