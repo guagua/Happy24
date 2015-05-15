@@ -5,12 +5,22 @@ var Sound = cc.Class.extend({
 		_remove:0,
 		_close:0,
 		ctor:function () {
-		   var Silence1=LocalStorage.getInstance().getItem("IS_PLAY_MUSIC");
+				var Silence1=LocalStorage.getInstance().getItem("IS_PLAY_MUSIC");
 			    if(Silence1==1)
 				{
 				this._Silence1=1;
 				}	    
 	
+			    var Silence2=LocalStorage.getInstance().getItem("IS_PLAY_EFFECT");
+			    if(Silence2==1)
+			    {
+			    this._Silence2=1;
+			    }	
+			    
+			    cc.log(Silence1);
+			    cc.log(Silence2);
+			    
+			    
 	    },
 		playBg:function(){
 			//cc.sys.os!=cc.sys.OS_ANDROID
@@ -49,21 +59,30 @@ var Sound = cc.Class.extend({
 //				cc.audioEngine.playEffect(res.lvup_mp3, false);
 //			}
 //		},
-//		playBtn:function(){
-//			if(!Sound._Silence2){
-//				cc.audioEngine.playEffect(res.btn_mp3, false);
-//			}
-//		},
-//		playFail:function(){
-//			if(!Sound._Silence2){
-//				cc.audioEngine.playEffect(res.fail_mp3, false);
-//			}
-//		},
-//		playBomb:function(){
-//			if(!Sound._Silence2){
-//				cc.audioEngine.playEffect(res.bomb_mp3, false);
-//			}
-//		},
+		playBtn:function(){
+	
+			if(!this._Silence2){
+				cc.audioEngine.playEffect(res.btn_mp3, false);
+			}
+		},
+		playLose:function(){
+			if(!this._Silence2){
+				
+				if(!this._Silence1)
+				cc.audioEngine.stopMusic(true);
+				
+				cc.audioEngine.playEffect(res.lose_mp3, false);
+			}
+		},
+		playWin:function(){
+			if(!this._Silence2){
+				
+				if(!this._Silence1)
+				cc.audioEngine.stopMusic(true);
+				
+				cc.audioEngine.playEffect(res.win_mp3, false);
+			}
+		},
 //		playGold:function(){
 //			if(!Sound._Silence2){
 //				cc.audioEngine.playEffect(res.gold_mp3, false);
@@ -100,17 +119,20 @@ var Sound = cc.Class.extend({
 				//cc.audioEngine.setMusicVolume(0);
 				cc.audioEngine.stopMusic(true);
 			}
+		},
+		effectOnOff:function(){
+			if(this._Silence2){
+				this._Silence2 = 0;
+				LocalStorage.getInstance().setItem("IS_PLAY_EFFECT", 0);
+				//cc.audioEngine.setEffectsVolume(1);
+			}
+			else{
+				this._Silence2 = 1;
+				LocalStorage.getInstance().setItem("IS_PLAY_EFFECT", 1);
+				//cc.audioEngine.stopAllEffects(true);
+				//cc.audioEngine.setEffectsVolume(0);
+			}
 		}
-//		effectOnOff:function(){
-//			if(Sound._Silence2){
-//				Sound._Silence2 = false;
-//				cc.audioEngine.setEffectsVolume(1);
-//			}
-//			else{
-//				Sound._Silence2 = true;
-//				cc.audioEngine.setEffectsVolume(0);
-//			}
-//		}
 });
 
 Sound.getInstance = function () {

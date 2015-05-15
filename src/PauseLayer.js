@@ -26,7 +26,7 @@ var PauseLayer = cc.Layer.extend({
 		this.addChild(bgLayer2, 1);
 
 		//标题
-		var settitle= new cc.Sprite("res/hz/xiuxiyixia.png");
+		var settitle= new cc.Sprite("#xiuxiyixia.png");
 		settitle.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height-settitle.getBoundingBox().height/2,
@@ -37,7 +37,7 @@ var PauseLayer = cc.Layer.extend({
 
 
 		//白色底框
-		var white_bg = new cc.Sprite("res/hz/set_bg.png");
+		var white_bg = new cc.Sprite("res/set_bg.png");
 		white_bg.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height*3/5,
@@ -50,8 +50,8 @@ var PauseLayer = cc.Layer.extend({
 		
 		//添加继续游戏按钮
 		var item1 = new cc.MenuItemImage(
-				"res/hz/restart_btn.png",
-				"res/hz/restart_btn.png",
+				"#restart_btn.png",
+				"#restart_btn.png",
 				this.closeSetting,this
 		);
 
@@ -65,7 +65,7 @@ var PauseLayer = cc.Layer.extend({
 		
 
 		//添加音乐栏
-		var musictag = new cc.Sprite("res/hz/music_icon.png");
+		var musictag = new cc.Sprite("#music_icon.png");
 		musictag.attr({
 			x: white_bg.getBoundingBox().width/6,
 			y: white_bg.getBoundingBox().height*3/6,
@@ -90,10 +90,10 @@ var PauseLayer = cc.Layer.extend({
 		//
 		var switchControl = new cc.ControlSwitch
 		(
-				new cc.Sprite("res/hz/switch-mask.png"),
-				new cc.Sprite("res/hz/switch-on.png"),
-				new cc.Sprite("res/hz/switch-off.png"),
-				new cc.Sprite("res/hz/p1.png"),
+				new cc.Sprite(res.switch_mask_png),
+				new cc.Sprite(res.switch_on_png),
+				new cc.Sprite(res.switch_off_png),
+				new cc.Sprite(res.switch_mv1_png),
 				new cc.LabelTTF("off", "Arial-BoldMT", 32),
 				new cc.LabelTTF("on", "Arial-BoldMT", 32)
 		);
@@ -109,7 +109,7 @@ var PauseLayer = cc.Layer.extend({
 
 
 		//添加音效栏
-		var sfxtag = new cc.Sprite("res/hz/sfx_icon.png");
+		var sfxtag = new cc.Sprite("#sfx_icon.png");
 		sfxtag.attr({
 			x: white_bg.getBoundingBox().width/6,
 			y: white_bg.getBoundingBox().height*1/5,
@@ -134,10 +134,10 @@ var PauseLayer = cc.Layer.extend({
 		//
 		var switchControl2 = new cc.ControlSwitch
 		(
-				new cc.Sprite("res/hz/switch-mask.png"),
-				new cc.Sprite("res/hz/switch-on.png"),
-				new cc.Sprite("res/hz/switch-off.png"),
-				new cc.Sprite("res/hz/s1.png"),
+				new cc.Sprite(res.switch_mask_png),
+				new cc.Sprite(res.switch_on_png),
+				new cc.Sprite(res.switch_off_png),
+				new cc.Sprite(res.switch_mv2_png),
 				new cc.LabelTTF("off", "Arial-BoldMT", 32),
 				new cc.LabelTTF("on", "Arial-BoldMT", 32)
 		);
@@ -145,9 +145,9 @@ var PauseLayer = cc.Layer.extend({
 		switchControl2.y = white_bg.getBoundingBox().height*1/5;
 		
 		if (!Sound.getInstance()._Silence2) {
-			switchControl.setOn(true, false);
+			switchControl2.setOn(true, false);
 		} else {
-			switchControl.setOn(false, false);
+			switchControl2.setOn(false, false);
 		}
 		white_bg.addChild(switchControl2);
 
@@ -162,8 +162,8 @@ var PauseLayer = cc.Layer.extend({
 
 		//添加返回地图按钮
 		var aboutitem1 = new cc.MenuItemImage(
-				"res/hz/backtomap_btn.png",
-				"res/hz/backtomap_btn.png",
+				"#backtomap_btn.png",
+				"#backtomap_btn.png",
 				this.backtomap,this
 		);
 
@@ -185,16 +185,16 @@ var PauseLayer = cc.Layer.extend({
 
 	},
 	valueChanged2:function (sender, controlEvent) {
-
-		if (sender.isOn()) {
-
-
-		}
-		else {
-
-
-
-		}
+		Sound.getInstance().effectOnOff();
+//		if (sender.isOn()) {
+//
+//
+//		}
+//		else {
+//
+//
+//
+//		}
 	},
 
 	closeSetting:function () {

@@ -29,8 +29,8 @@ var SettingLayer = cc.Layer.extend({
 
 		//添加关闭按钮
 		var item1 = new cc.MenuItemImage(
-				"res/hz/close_icon.png",
-				"res/hz/close_icon.png",
+				"#close_icon.png",
+				"#close_icon.png",
 				this.closeSetting,this
 		);
 
@@ -45,7 +45,7 @@ var SettingLayer = cc.Layer.extend({
 		
 		
         //标题
-		var settitle= new cc.Sprite("res/hz/shezhi.png");
+		var settitle= new cc.Sprite("#shezhi.png");
 		settitle.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height-settitle.getBoundingBox().height/2,
@@ -56,7 +56,7 @@ var SettingLayer = cc.Layer.extend({
 		
 		
 		//白色底框
-		var white_bg = new cc.Sprite("res/hz/set_bg.png");
+		var white_bg = new cc.Sprite("res/set_bg.png");
 		white_bg.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height*2/5,
@@ -67,7 +67,7 @@ var SettingLayer = cc.Layer.extend({
 		
 		
 		//添加音乐栏
-		var musictag = new cc.Sprite("res/hz/music_icon.png");
+		var musictag = new cc.Sprite("#music_icon.png");
 		musictag.attr({
 			x: white_bg.getBoundingBox().width/6,
 			y: white_bg.getBoundingBox().height*5/6,
@@ -92,10 +92,10 @@ var SettingLayer = cc.Layer.extend({
 		//
 		var switchControl = new cc.ControlSwitch
 		(
-				new cc.Sprite("res/hz/switch-mask.png"),
-				new cc.Sprite("res/hz/switch-on.png"),
-				new cc.Sprite("res/hz/switch-off.png"),
-				new cc.Sprite("res/hz/p1.png"),
+				new cc.Sprite(res.switch_mask_png),
+				new cc.Sprite(res.switch_on_png),
+				new cc.Sprite(res.switch_off_png),
+				new cc.Sprite(res.switch_mv1_png),
 				new cc.LabelTTF("off", "Arial-BoldMT", 32),
 				new cc.LabelTTF("on", "Arial-BoldMT", 32)
 		);
@@ -114,7 +114,7 @@ var SettingLayer = cc.Layer.extend({
 		
 		
 		//添加音效栏
-		var sfxtag = new cc.Sprite("res/hz/sfx_icon.png");
+		var sfxtag = new cc.Sprite("#sfx_icon.png");
 		sfxtag.attr({
 			x: white_bg.getBoundingBox().width/6,
 			y: white_bg.getBoundingBox().height*4/7,
@@ -139,10 +139,10 @@ var SettingLayer = cc.Layer.extend({
 		//
 		var switchControl2 = new cc.ControlSwitch
 		(
-				new cc.Sprite("res/hz/switch-mask.png"),
-				new cc.Sprite("res/hz/switch-on.png"),
-				new cc.Sprite("res/hz/switch-off.png"),
-				new cc.Sprite("res/hz/s1.png"),
+				new cc.Sprite(res.switch_mask_png),
+				new cc.Sprite(res.switch_on_png),
+				new cc.Sprite(res.switch_off_png),
+				new cc.Sprite(res.switch_mv2_png),
 				new cc.LabelTTF("off", "Arial-BoldMT", 32),
 				new cc.LabelTTF("on", "Arial-BoldMT", 32)
 		);
@@ -150,9 +150,9 @@ var SettingLayer = cc.Layer.extend({
 		switchControl2.y = white_bg.getBoundingBox().height*4/7;
 		
 		if (!Sound.getInstance()._Silence2) {
-			switchControl.setOn(true, false);
+			switchControl2.setOn(true, false);
 		} else {
-			switchControl.setOn(false, false);
+			switchControl2.setOn(false, false);
 		}
 		white_bg.addChild(switchControl2);
 		
@@ -167,8 +167,8 @@ var SettingLayer = cc.Layer.extend({
 		
 		//添加关于我们按钮
 		var aboutitem1 = new cc.MenuItemImage(
-				"res/hz/about_us_btn.png",
-				"res/hz/about_us_btn.png",
+				"#about_us_btn.png",
+				"#about_us_btn.png",
 				this.aboutClick,this
 		);
 
@@ -187,31 +187,11 @@ var SettingLayer = cc.Layer.extend({
 	},
 	valueChanged:function (sender, controlEvent) {
 		Sound.getInstance().bgOnOff();
-		
-//		if (sender.isOn()) {
-//			//this._displayValueLabel.setString("On");
-//			
-//			setIsPlayMusic(1);
-//			cc.audioEngine.playMusic(res.bg_mp3, true);
-//		}
-//		else {
-//			//this._displayValueLabel.setString("Off");
-//			setIsPlayMusic(0);
-//			cc.audioEngine.stopMusic(true);
-//		}
+	
 	
 	},
 	valueChanged2:function (sender, controlEvent) {
-
-		if (sender.isOn()) {
-
-		
-		}
-		else {
-
-			
-
-		}
+		Sound.getInstance().effectOnOff();
 	},
 	
 	closeSetting:function () {

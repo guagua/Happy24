@@ -12,11 +12,10 @@
     ],
     "jsList":[
         "src/resource.js",
+        "src/GlobalVars.js",
         "src/GameInitScene.js",
         "src/GameSelectScene.js",
         "src/GameScene.js",
-        "src/NumBox.js",
-        "src/CalBox.js",
         "src/util/DisplayUtil.js",
         "src/util/CalUtil.js",
         "src/util/LocalStorage.js",
@@ -27,7 +26,6 @@
         "src/WinScene.js",
         "src/PauseLayer.js",
         "src/Numbtn.js",
-        "src/GlobalVars.js",
         "src/Sound.js"
     ]
 }

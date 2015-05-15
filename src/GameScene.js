@@ -53,34 +53,65 @@ var GameLayer = cc.Layer.extend({
 	init:function (level) {
 		this._super();
 		
+	
 		
+			if(!cc.audioEngine.isMusicPlaying())
+			{	
+			var action1=cc.delayTime(1.0);
+			var action2=cc.sequence(action1,cc.callFunc(function(){
+				Sound.getInstance().playBg();	
+			}, this));
+			this.runAction(action2);
+			}
+			
+			
 		this.guankaNum = level;
 		cc.log("level:%d", level)
 		//this.size = cc.winSize;
 		var size=cc.winSize;
 		//this.setColor(cc.color(180, 170, 160, 255));
 		
-		var layerbg=new cc.LayerColor(cc.color(0,0,0,255),size.width,size.height);  	
+		var layerbg=new cc.LayerColor(cc.color(251,254,238,255),size.width,size.height);  	
 		this.addChild(layerbg);
 		
 		
+		//屏幕顶部标题浮层
+		var gametitle_bg=new cc.LayerColor(cc.color(255,255,255,150),size.width,100);  
+		gametitle_bg.y=size.height-100;
+		this.addChild(gametitle_bg);
+		
+		//log
+		var logo_bigsprite = new cc.Sprite("#logo_big.png");
+		logo_bigsprite.attr({
+			x: 0,
+			y: 5,
+			anchorX: 0,
+			anchorY: 0,
+			scale: 0.4
+		});
+		gametitle_bg.addChild(logo_bigsprite);  
+		
+		
+		
 		this.startLabel = new cc.LabelTTF("关卡：" + this.guankaNum, "微软雅黑", 30);
-		this.startLabel.setAnchorPoint(0.5, 0.5);
-		this.startLabel.setColor(cc.color(255, 0, 0, 1));
-		this.startLabel.setPosition(size.width/2,size.height - this.startLabel.getFontSize());
-		this.addChild(this.startLabel, 1);
+		this.startLabel.setAnchorPoint(0, 0);
+		this.startLabel.setColor(cc.color(0, 0, 0, 1));
+		
+		this.startLabel.setPosition(logo_bigsprite.getBoundingBox().width+10,5);
+		gametitle_bg.addChild(this.startLabel, 1);
 		
 		
 		
 		//添加暂停按钮
 		var pauseitem = new cc.MenuItemImage(
-				"res/hz/pause_btn.png",
-				"res/hz/pause_btn.png",
+				"#pause_btn.png",
+				"#pause_btn.png",
 				this.onClickPause,this
 		);
 		pauseitem.anchorX=1;
+		pauseitem.anchorY=0.5;
 		pauseitem.x = size.width-pauseitem.getBoundingBox().width/2-20;	
-		pauseitem.y = size.height-pauseitem.getBoundingBox().height-20;
+		pauseitem.y = size.height-gametitle_bg.getBoundingBox().height/2;
 
 //		var pausemenu = new cc.Menu(pauseitem1);
 //		pausemenu.anchorX=0;
@@ -93,7 +124,7 @@ var GameLayer = cc.Layer.extend({
 		
 	//放置数字运算显示框	
 	
-		var showbg = new cc.Sprite("res/hz/show_bg.png");
+		var showbg = new cc.Sprite("#display_bg.png");
 		showbg.attr({
 			x: size.width/2,
 			y: size.height*2/3,
@@ -117,8 +148,8 @@ var GameLayer = cc.Layer.extend({
 		
 		//添加保存按钮
 		var saveitem = new cc.MenuItemImage(
-		"res/hz/save_btn.png",
-		"res/hz/save_btn.png",
+			"#save_btn.png",
+			"#save_btn_grey.png",
 		this.onClickSave,this
 		);
 		saveitem.anchorX=0;
@@ -139,8 +170,8 @@ var GameLayer = cc.Layer.extend({
 		//放置提示和重来按钮
 
 		var tipitem = new cc.MenuItemImage(
-				"res/hz/tishi_btn.png",
-				"res/hz/tishi_btn.png",
+				"#tips_btn.png",
+				"#tips_btn.png",
 				this.showTip,this
 		);
 		tipitem.anchorY=0;
@@ -148,8 +179,8 @@ var GameLayer = cc.Layer.extend({
 		tipitem.y = 0;
 
 		var restartitem= new cc.MenuItemImage(
-				"res/hz/rsgame_btn.png",
-				"res/hz/rsgame_btn.png",
+				"#retry_btn.png",
+				"#retry_btn.png",
 				this.restartgame,this
 		);
 		restartitem.anchorY=0;
@@ -176,40 +207,64 @@ var GameLayer = cc.Layer.extend({
 		var numbtn=this.numbtns=[];
 		var calbtn=this.calbtns=[];
 
+		var numbtnbg_x=(size.width-20)/8;
+		
 		 for(var i=0;i<4;i++)
 			{
 			 numbtn[i]=new Numbtn(this.onClickNum,this,this.numArr[i],i);
-			 numbtn[i].x=size.width*(i+1)/5;
+			 numbtn[i].x=10+numbtnbg_x*(2*i+1);
 			 numbtn[i].y=size.height*2/5;	
+			 
+			 //
+			
+			 
+			 var numbtnbg = new cc.Sprite("#card_shadow.png");
+			 numbtnbg.attr({
+				 x: 10+numbtnbg_x*(2*i+1),
+				 y: size.height*2/5,
+				 anchorX: 0.5,
+				 anchorY: 0.5,
+				 scale: 1
+			 });
+			 this.addChild(numbtnbg); 
+			 
+			 
+			 
+			 
+			 
 			 //标记
 			 numbtn[i].mytag=i;
 			 
 			 calbtn[i]=new cc.MenuItemImage(
-					 "res/hz/yunsuanfu_bg_btn.png",
-					 "res/hz/yunsuanfu_bg_btn.png",
+					 "#cal_btn_"+i+".png",
+					 "#cal_btn_"+i+".png",
 					 this.onClickCal,this
 			 );
 
-			 calbtn[i].x=size.width*(i+1)/5;
+			 calbtn[i].x=10+numbtnbg_x*(2*i+1);
 			 calbtn[i].y=size.height/5;		 
 			
 			 //标记
 			 calbtn[i].mytag=i;
 			 
 			 
-			 var calLabel = new cc.LabelTTF(this.calStringArr[i], "微软雅黑",25);
-			 calLabel.attr({
-				 x: calbtn[i].getBoundingBox().width/2,
-				 y: calbtn[i].getBoundingBox().height/2,
-				 anchorX: 0.5,
-				 anchorY: 0.5,
-				 color: cc.color(0,0,0),
-				 scale: 1
-			 });
-			 calbtn[i].addChild(calLabel,1);
+//			 var calLabel = new cc.LabelTTF(this.calStringArr[i], "微软雅黑",25);
+//			 calLabel.attr({
+//				 x: calbtn[i].getBoundingBox().width/2,
+//				 y: calbtn[i].getBoundingBox().height/2,
+//				 anchorX: 0.5,
+//				 anchorY: 0.5,
+//				 color: cc.color(0,0,0),
+//				 scale: 1
+//			 });
+//			 calbtn[i].addChild(calLabel,1);
 		
 			}
 	
+		 
+	 
+		 
+		 
 		
 		 var menu = new cc.Menu(pauseitem,saveitem,tipitem,restartitem,numbtn[0],numbtn[1],numbtn[2],numbtn[3],calbtn[0],calbtn[1],calbtn[2],calbtn[3]);
 		
@@ -223,7 +278,7 @@ var GameLayer = cc.Layer.extend({
          //提示显示
 		 this.resultLabel = new cc.LabelTTF("提示：", "微软雅黑", 30);
 		 this.resultLabel.setAnchorPoint(0, 0);
-		 this.resultLabel.setColor(cc.color(255, 255, 0, 1));
+		 this.resultLabel.setColor(cc.color(0, 0, 0, 1));
 		 this.resultLabel.anchorX=0;
 		 this.resultLabel.anchorY=1;
 		 
@@ -316,6 +371,7 @@ var GameLayer = cc.Layer.extend({
 
 	},
 	onClickPause:function() {
+		Sound.getInstance().playBtn();
 		if(this._PauseLayer)
 		{
 			if(!this._PauseLayer.Visible)
@@ -396,6 +452,8 @@ var GameLayer = cc.Layer.extend({
 				if(pnum>=23.999&&pnum<=24.001) 
 					{
 					//youwin
+					
+					Sound.getInstance().playWin();
 					GV.setCurrentLevel((this.guankaNum+1));
 					cc.log("youwin"+pnum);
 					cc.director.runScene(new WinScene());
@@ -403,7 +461,8 @@ var GameLayer = cc.Layer.extend({
 					}else
 					{
 					//youlose
-					cc.log("youlose"+pnum);
+					Sound.getInstance().playLose();
+					//cc.log("youlose"+pnum);
 				    cc.director.runScene(new GameScene(this.guankaNum));
 					}
 				return;
@@ -444,136 +503,143 @@ var GameLayer = cc.Layer.extend({
 		
 		//更新显示
 		this.numLabel.setString(this.numbtns[this.firstPic].num+this.calNum);
-		cc.log("test:"+this.calStringArr[sender.calnum]);
+		//cc.log("test:"+this.calStringArr[sender.calnum]);
 
 	},
 	
 	showTip:function() {
-		canCalc(this.numArr[0], this.numArr[1], this.numArr[2], this.numArr[3], TARGET_NUMBER);
+		if(this.resultLabel.getString()!="提示：")
+		return;
+		
+		Sound.getInstance().playBtn();
+		canCalc(this.numArr[0], this.numArr[1], this.numArr[2], this.numArr[3], GV.TARGET_NUMBER);
 		//this.resultLabel.setString(tipString);
 		this.resultLabel.setString("提示："+CU.tipString);
 	},
 	
 	restartgame:function() {
+		Sound.getInstance().playBtn();
 		cc.director.runScene(new GameScene(this.guankaNum));
 		
 	},
 	
-	undoClick:function() {
-		if (this.gameStep > 0) {
-			this.backToStep(this.gameStep - 1);
-		} else {
-			this.backToStep(0);
-		}
-	},
-	
-	resetClick:function() {
-		this.backToStep(0);
-	},
+//	undoClick:function() {
+//		if (this.gameStep > 0) {
+//			this.backToStep(this.gameStep - 1);
+//		} else {
+//			this.backToStep(0);
+//		}
+//	},
+//	
+//	resetClick:function() {
+//		this.backToStep(0);
+//	},
 	
 	returnToMain:function() {
+		Sound.getInstance().playBtn();
 		cc.director.runScene(new GameInitScene());
 	},
 	
 	returnToSelect:function() {
+		Sound.getInstance().playBtn();
 		cc.director.runScene(new GameSelectScene());
 	},
 	
-	onToucheMoved:function(touches, event){
-		cc.log("move:")
-		var touch = touches[0];
-		var location = touch.getLocation();
-		
-		for(var i=0;i<4;i++){
-			if(cc.rectContainsPoint(this.calBoxArr[i].getBoundingBox(),location))	
-			{ 
-				this.calNum = i;
-				this.closeCalcItem();
-				return;
-			}
-		}
-		
-		for(var i=0;i<4;i++){
-			if(cc.rectContainsPoint(this.numBoxArr[i].getBoundingBox(),location))	
-			{ 
-				if(this.numBoxArr[i].State!=0) {
-					return;
-				}
-				cc.log("move:%d", i)
-				var n = 0; 
-				var firstPic = -1;
-				for (var j = 0; j < 4; j++) {
-					if (this.numBoxArr[j].State == STATE_SELECT) {
-						if (j != i) {
-							firstPic = j;
-						}
-						n++;
-					}
-				}
-				if (n == 0) {
-					if (this.numBoxArr[i].State == STATE_INIT) {
-						this.numBoxArr[i].setState(STATE_SELECT);// 选中数字变为选中状态
-						this.firstPic = i;
-						this.secondPic = -1;
-					}
-				} else if (n == 1) {
-					this.showCalcItem(i);
-					this.numBoxArr[i].setState(STATE_SELECT);
-					this.secondPic = i;
-				}
-			}
-		}
-	},
-	onTouchEnded:function(touches, event){
-		cc.log("end:")
-		var n = 0; 
-		for (var j = 0; j < 4; j++) {
-			if (this.numBoxArr[j].State == STATE_SELECT) {
-				n++;
-			}
-		}
-		if (n == 2) {
-			var result = 0;
-			switch(this.calNum) {
-			case -1:
-				return;
-			case 0:
-				result = this.numBoxArr[this.firstPic].num + this.numBoxArr[this.secondPic].num;
-				break;
-			case 1:
-				result = this.numBoxArr[this.firstPic].num - this.numBoxArr[this.secondPic].num;
-				break;
-			case 2:
-				result = this.numBoxArr[this.firstPic].num * this.numBoxArr[this.secondPic].num;
-				break;
-			case 3:
-				result = this.numBoxArr[this.firstPic].num / this.numBoxArr[this.secondPic].num;
-				break;
-			}
-			this.numBoxArr[this.firstPic].setState(STATE_DONE);
-			this.numBoxArr[this.secondPic].setState(STATE_INIT);
-			this.numBoxArr[this.secondPic].setNum(result);
-			this.calNum = -1;
-			
-			for(var i = 0; i < 4; i++) {
-				this.numArr.push(this.numBoxArr[i].getNum());
-				this.stateArr.push(this.numBoxArr[i].getState());
-			}
-			
-			if (this.gameStep == 2) {
-				if (result == TARGET_NUMBER) {
-					this.resultLabel.setString("恭喜你答对啦~~");
-					this.resetFlag = true;
-					return;
-				} else {
-					this.resultLabel.setString("对不起，答错了哦，再来一次吧");
-					this.resetFlag = true;
-					return;
-				}
-			}
-			this.gameStep++;
-		} 
-	},
+//	onToucheMoved:function(touches, event){
+//		cc.log("move:")
+//		var touch = touches[0];
+//		var location = touch.getLocation();
+//		
+//		for(var i=0;i<4;i++){
+//			if(cc.rectContainsPoint(this.calBoxArr[i].getBoundingBox(),location))	
+//			{ 
+//				this.calNum = i;
+//				this.closeCalcItem();
+//				return;
+//			}
+//		}
+//		
+//		for(var i=0;i<4;i++){
+//			if(cc.rectContainsPoint(this.numBoxArr[i].getBoundingBox(),location))	
+//			{ 
+//				if(this.numBoxArr[i].State!=0) {
+//					return;
+//				}
+//				cc.log("move:%d", i)
+//				var n = 0; 
+//				var firstPic = -1;
+//				for (var j = 0; j < 4; j++) {
+//					if (this.numBoxArr[j].State == STATE_SELECT) {
+//						if (j != i) {
+//							firstPic = j;
+//						}
+//						n++;
+//					}
+//				}
+//				if (n == 0) {
+//					if (this.numBoxArr[i].State == STATE_INIT) {
+//						this.numBoxArr[i].setState(STATE_SELECT);// 选中数字变为选中状态
+//						this.firstPic = i;
+//						this.secondPic = -1;
+//					}
+//				} else if (n == 1) {
+//					this.showCalcItem(i);
+//					this.numBoxArr[i].setState(STATE_SELECT);
+//					this.secondPic = i;
+//				}
+//			}
+//		}
+//	},
+//	onTouchEnded:function(touches, event){
+//		cc.log("end:")
+//		var n = 0; 
+//		for (var j = 0; j < 4; j++) {
+//			if (this.numBoxArr[j].State == STATE_SELECT) {
+//				n++;
+//			}
+//		}
+//		if (n == 2) {
+//			var result = 0;
+//			switch(this.calNum) {
+//			case -1:
+//				return;
+//			case 0:
+//				result = this.numBoxArr[this.firstPic].num + this.numBoxArr[this.secondPic].num;
+//				break;
+//			case 1:
+//				result = this.numBoxArr[this.firstPic].num - this.numBoxArr[this.secondPic].num;
+//				break;
+//			case 2:
+//				result = this.numBoxArr[this.firstPic].num * this.numBoxArr[this.secondPic].num;
+//				break;
+//			case 3:
+//				result = this.numBoxArr[this.firstPic].num / this.numBoxArr[this.secondPic].num;
+//				break;
+//			}
+//			this.numBoxArr[this.firstPic].setState(STATE_DONE);
+//			this.numBoxArr[this.secondPic].setState(STATE_INIT);
+//			this.numBoxArr[this.secondPic].setNum(result);
+//			this.calNum = -1;
+//			
+//			for(var i = 0; i < 4; i++) {
+//				this.numArr.push(this.numBoxArr[i].getNum());
+//				this.stateArr.push(this.numBoxArr[i].getState());
+//			}
+//			
+//			if (this.gameStep == 2) {
+//				if (result == TARGET_NUMBER) {
+//					this.resultLabel.setString("恭喜你答对啦~~");
+//					this.resetFlag = true;
+//					return;
+//				} else {
+//					this.resultLabel.setString("对不起，答错了哦，再来一次吧");
+//					this.resetFlag = true;
+//					return;
+//				}
+//			}
+//			this.gameStep++;
+//		} 
+//	},
 	
 	backToStep:function(step) {
 		if (step > this.gameStep) return;
@@ -622,7 +688,7 @@ var GameLayer = cc.Layer.extend({
 			//this.numBoxArr[i].setNum(tempArr[i+1]);
 			this.numArr.push(tempArr[i+1]);
 			
-			this.stateArr.push(STATE_INIT);
+			this.stateArr.push(GV.STATE_INIT);
 			//this.numBoxArr[i].setState(STATE_INIT);
 			//this.closeCalcItem();
 		}
@@ -644,77 +710,77 @@ var GameLayer = cc.Layer.extend({
 		}
 	},
 
-	onTouchBegan:function(touches, event){
-		cc.log("begin:")
-		var touch = touches[0];
-		var location = touch.getLocation();
-		
-		if (this.resetFlag == true) {
-			this.nextGame();
-			return true;
-		}
-		
-		for(var i=0;i<4;i++){
-			if(cc.rectContainsPoint(this.calBoxArr[i].getBoundingBox(),location))	
-			{ 
-				this.calNum = i;
-				this.closeCalcItem();
-				return true;
-			}
-		}
-
-		for(var i=0;i<4;i++){
-			if(cc.rectContainsPoint(this.numBoxArr[i].getBoundingBox(),location))	
-			{ 
-				cc.log("begin:%d", i)
-				var n = 0; 
-				var lastPic = -1;
-				for (var j = 0; j < 4; j++) {
-					if (this.numBoxArr[j].State == STATE_SELECT) {
-						if (j != i) {
-							lastPic = j;
-						}
-						n++;
-					}
-				}
-				if (n == 0) {
-					if (this.numBoxArr[i].State == STATE_INIT) {
-						this.numBoxArr[i].setState(STATE_SELECT);// 选中数字变为选中状态
-						this.firstPic = i;
-					}
-				} else if (lastPic == -1) {
-					this.numBoxArr[i].setState(STATE_INIT);// 选中数字变为选中状态
-				} else if (n == 1) {
-					this.showCalcItem(i);
-					this.secondPic = i;
-					this.numBoxArr[i].setState(STATE_SELECT);
-				}
-				return true;
-			}
-		}
-	},
+//	onTouchBegan:function(touches, event){
+//		cc.log("begin:")
+//		var touch = touches[0];
+//		var location = touch.getLocation();
+//		
+//		if (this.resetFlag == true) {
+//			this.nextGame();
+//			return true;
+//		}
+//		
+//		for(var i=0;i<4;i++){
+//			if(cc.rectContainsPoint(this.calBoxArr[i].getBoundingBox(),location))	
+//			{ 
+//				this.calNum = i;
+//				this.closeCalcItem();
+//				return true;
+//			}
+//		}
+//
+//		for(var i=0;i<4;i++){
+//			if(cc.rectContainsPoint(this.numBoxArr[i].getBoundingBox(),location))	
+//			{ 
+//				cc.log("begin:%d", i)
+//				var n = 0; 
+//				var lastPic = -1;
+//				for (var j = 0; j < 4; j++) {
+//					if (this.numBoxArr[j].State == STATE_SELECT) {
+//						if (j != i) {
+//							lastPic = j;
+//						}
+//						n++;
+//					}
+//				}
+//				if (n == 0) {
+//					if (this.numBoxArr[i].State == STATE_INIT) {
+//						this.numBoxArr[i].setState(STATE_SELECT);// 选中数字变为选中状态
+//						this.firstPic = i;
+//					}
+//				} else if (lastPic == -1) {
+//					this.numBoxArr[i].setState(STATE_INIT);// 选中数字变为选中状态
+//				} else if (n == 1) {
+//					this.showCalcItem(i);
+//					this.secondPic = i;
+//					this.numBoxArr[i].setState(STATE_SELECT);
+//				}
+//				return true;
+//			}
+//		}
+//	},
 	
-	showCalcItem:function(index) {
-		var x = this.numBoxArr[index].getBoundingBox().x + BOX_WIDTH/2;
-		var y = this.numBoxArr[index].getBoundingBox().y + BOX_WIDTH/2;
-		
-		this.calBoxArr[0].setVisible(true);
-		this.calBoxArr[0].setPosition(x + BOX_WIDTH * 3 / 4, y);
-		this.calBoxArr[1].setVisible(true);
-		this.calBoxArr[1].setPosition(x - BOX_WIDTH * 3 / 4, y);
-		this.calBoxArr[2].setVisible(true);
-		this.calBoxArr[2].setPosition(x, y + BOX_WIDTH * 3 / 4);
-		this.calBoxArr[3].setVisible(true);
-		this.calBoxArr[3].setPosition(x, y - BOX_WIDTH * 3 / 4);
-	},
-	
-	closeCalcItem:function() {
-		for (var i = 0; i < 4; i++) {
-			this.calBoxArr[i].setVisible(false);
-			this.calBoxArr[i].setPosition(-100, -100);
-		}
-	},
-	
+//	showCalcItem:function(index) {
+//		var x = this.numBoxArr[index].getBoundingBox().x + BOX_WIDTH/2;
+//		var y = this.numBoxArr[index].getBoundingBox().y + BOX_WIDTH/2;
+//		
+//		this.calBoxArr[0].setVisible(true);
+//		this.calBoxArr[0].setPosition(x + BOX_WIDTH * 3 / 4, y);
+//		this.calBoxArr[1].setVisible(true);
+//		this.calBoxArr[1].setPosition(x - BOX_WIDTH * 3 / 4, y);
+//		this.calBoxArr[2].setVisible(true);
+//		this.calBoxArr[2].setPosition(x, y + BOX_WIDTH * 3 / 4);
+//		this.calBoxArr[3].setVisible(true);
+//		this.calBoxArr[3].setPosition(x, y - BOX_WIDTH * 3 / 4);
+//	},
+//	
+//	closeCalcItem:function() {
+//		for (var i = 0; i < 4; i++) {
+//			this.calBoxArr[i].setVisible(false);
+//			this.calBoxArr[i].setPosition(-100, -100);
+//		}
+//	},
+//	
 	nextGame:function() {
 		setCurrentLevel(this.guankaNum);
 		this.resetWithGuanka(this.guankaNum + 1);

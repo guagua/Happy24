@@ -8,7 +8,7 @@ var Numbtn = cc.MenuItemImage.extend({
 		
 	
 	this.num=five;
-	this._super("res/hz/num_bg_btn.png", "res/hz/num_bg_btn.png", three, four);	
+	this._super("#card_bg.png", "#card_bg.png", three, four);	
 	this.setTag(six);
 	
 	this.numLabel = new cc.LabelTTF(""+five, "微软雅黑",25);
@@ -58,7 +58,21 @@ var Numbtn = cc.MenuItemImage.extend({
 			this.y+=20;
 			break;
 		case 2:
-			this.color=cc.color(0,0,0,255);
+			this.numLabel.setVisible(false);
+			//覆盖层
+			var sprite = new cc.Sprite("#card_back.png");
+			sprite.attr({
+				x: 0,
+				y: 0,
+				anchorX: 0,
+				anchorY: 0,
+				scale: 1
+			});
+			this.addChild(sprite); 
+			//this.y-=20;可做个动画过渡下
+			
+			//this.color=cc.color(0,0,0,255);
+
 			break;
 		}
 	}

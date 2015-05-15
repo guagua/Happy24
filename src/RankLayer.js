@@ -104,7 +104,7 @@ var RankLayer = cc.Layer.extend({
 					
 				ranktag=data.msg.ranktag;
 				
-				cc.log(ranktag);
+				//cc.log(ranktag);
 				
 				callback(data,showitem);
 				

@@ -179,11 +179,11 @@ var canCalc = function(n1, n2, n3, n4, targetN) {
 //						cc.log("cal str:%s hardNum:%d", calStr, CU.hardNum);
 						return true;
 					}
-					flg=calWith11(arr[i],arr[j],arr[k],arr[l], TARGET_NUMBER);
+					flg=calWith11(arr[i],arr[j],arr[k],arr[l], GV.TARGET_NUMBER);
 					if(flg==1) {
 						return true
 					};
-					flg=calWith22(arr[i],arr[j],arr[k],arr[l], TARGET_NUMBER);
+					flg=calWith22(arr[i],arr[j],arr[k],arr[l], GV.TARGET_NUMBER);
 					if(flg==1) {
 						return true;
 					}
@@ -199,34 +199,34 @@ var canCalc = function(n1, n2, n3, n4, targetN) {
 };
 
 var initLevelNum = function () {
-	for (var i = 0; i < USED_NUMBER; i++) {
+	for (var i = 0; i < GV.USED_NUMBER; i++) {
 		if (i == 0) {
-			for (var j = 1; j <= MAX_NUMBER; j++) {
-				for (var k = 1; k <= MAX_NUMBER && k != j; k++) {
-					for (var l = 1; l <= MAX_NUMBER && (l != j && l != i); l++) {
-						for (var m = 1; m <= MAX_NUMBER && ((m != j && m != k) && m != l); m++) {
-							canCalc(j, k, l, m, TARGET_NUMBER);
+			for (var j = 1; j <= GV.MAX_NUMBER; j++) {
+				for (var k = 1; k <= GV.MAX_NUMBER && k != j; k++) {
+					for (var l = 1; l <= GV.MAX_NUMBER && (l != j && l != i); l++) {
+						for (var m = 1; m <= GV.MAX_NUMBER && ((m != j && m != k) && m != l); m++) {
+							canCalc(j, k, l, m, GV.TARGET_NUMBER);
 						}
 					}
 				}
 			}
 		} else if (i == 1) {
-			for (var j = 1; j <= MAX_NUMBER; j++) {
-				for (var k = 1; k <= MAX_NUMBER && k != j; k++) {
-					for (var l = 1; l <= MAX_NUMBER && (l != j); l++) {
-						canCalc(j, j, k, l, TARGET_NUMBER);
+			for (var j = 1; j <= GV.MAX_NUMBER; j++) {
+				for (var k = 1; k <= GV.MAX_NUMBER && k != j; k++) {
+					for (var l = 1; l <= GV.MAX_NUMBER && (l != j); l++) {
+						canCalc(j, j, k, l, GV.TARGET_NUMBER);
 					}
 				}
 			}
 		} else if (i == 2) {
-			for (var j = 1; j <= MAX_NUMBER; j++) {
-				for (var k = 1; k <= MAX_NUMBER && k != j; k++) {
-					canCalc(j, j, j, k, TARGET_NUMBER);
+			for (var j = 1; j <= GV.MAX_NUMBER; j++) {
+				for (var k = 1; k <= GV.MAX_NUMBER && k != j; k++) {
+					canCalc(j, j, j, k, GV.TARGET_NUMBER);
 				} 
 			}
 		} else if (i == 3) {
-			for (var j = 1; j <= MAX_NUMBER; j++) {
-				canCalc(j, j, j, j, TARGET_NUMBER);
+			for (var j = 1; j <= GV.MAX_NUMBER; j++) {
+				canCalc(j, j, j, j, GV.TARGET_NUMBER);
 			}
 		}
 	}

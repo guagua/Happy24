@@ -24,8 +24,8 @@ var AboutLayer = cc.Layer.extend({
 
 		//添加关闭按钮
 		var item1 = new cc.MenuItemImage(
-				"res/hz/close_icon.png",
-				"res/hz/close_icon.png",
+				"#close_icon.png",
+				"#close_icon.png",
 				this.closeSetting,this
 		);
 
@@ -37,7 +37,7 @@ var AboutLayer = cc.Layer.extend({
 		bgLayer2.addChild(menu,2);
 		
         //标题
-		var settitle= new cc.Sprite("res/about_title.png");
+		var settitle= new cc.Sprite(res.about_title_png);
 		settitle.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height-settitle.getBoundingBox().height/2,
@@ -47,7 +47,7 @@ var AboutLayer = cc.Layer.extend({
 		bgLayer2.addChild(settitle,2);
 		
 		//白色底框
-		var white_bg = new cc.Scale9Sprite("res/dark_bg.png");
+		var white_bg = new cc.Scale9Sprite(res.dark_bg_png);
 		white_bg.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height*2.3/5,
@@ -58,7 +58,7 @@ var AboutLayer = cc.Layer.extend({
 		});
 		bgLayer2.addChild(white_bg,2);
 		
-		var logo = new cc.Sprite("res/logo.png");
+		var logo = new cc.Sprite(res.logo_png);
 		logo.attr({
 			x: white_bg.getBoundingBox().width/2,
 			y: white_bg.getBoundingBox().height-10,
@@ -79,7 +79,7 @@ var AboutLayer = cc.Layer.extend({
 		});
 		white_bg.addChild(introLabel,1);
 		
-		var weixin = new cc.Sprite("res/weixin.png");
+		var weixin = new cc.Sprite(res.weixin_png);
 		weixin.attr({
 			x: white_bg.getBoundingBox().width/2,
 			y: introLabel.y - introLabel._getHeight() - 90,
@@ -89,8 +89,8 @@ var AboutLayer = cc.Layer.extend({
 		white_bg.addChild(weixin,2);
 
 		var enterWeb = new cc.MenuItemImage(
-			"res/enter_web.png",
-			"res/enter_web.png",
+			res.enter_web_png,
+			res.enter_web_png,
 			this.enterWebClick,this
 		);
 
@@ -102,7 +102,7 @@ var AboutLayer = cc.Layer.extend({
 		enterMenu.y = 0;	
 		white_bg.addChild(enterMenu,2);
 		
-		var line = new cc.Sprite("res/line.png");
+		var line = new cc.Sprite(res.line_png);
 		line.attr({
 			x: white_bg.getBoundingBox().width/2,
 			y: enterWeb.y - enterWeb._getHeight() + 30,

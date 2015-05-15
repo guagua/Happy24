@@ -2,7 +2,7 @@ var LocalStorage = cc.Class.extend({
 	ctor:function () {
 	},
 	getItem:function (key) {
-		var val=cc.sys.localStorage.getItem(key);
+		var val=cc.sys.localStorage.getItem("happy24_"+key);
 		if(val==null||val==""||val==undefined){
 			return null;
 		}else{
@@ -11,7 +11,7 @@ var LocalStorage = cc.Class.extend({
 		
 	},
 	setItem:function (key,val) {
-		cc.sys.localStorage.setItem(key,val);
+		cc.sys.localStorage.setItem("happy24_"+key,val);
 	}
 });
 
