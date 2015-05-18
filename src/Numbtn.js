@@ -11,7 +11,7 @@ var Numbtn = cc.MenuItemImage.extend({
 	this._super("#card_bg.png", "#card_bg.png", three, four);	
 	this.setTag(six);
 	
-	this.numLabel = new cc.LabelTTF(""+five, "微软雅黑",25);
+	this.numLabel = new cc.LabelTTF(""+five, "微软雅黑",50);
 	this.numLabel .attr({
 		x: this.getBoundingBox().width/2,
 		y: this.getBoundingBox().height/2,

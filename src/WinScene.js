@@ -1,7 +1,10 @@
 var WinLayer = cc.Layer.extend({
-	init:function () {
+	isRand:false,
+	init:function (isRand) {
 		this._super();
 		var size = cc.winSize;
+		this.isRand = isRand;
+		cc.log("isRand:%s", isRand);
 		
 		var layerbg=new cc.LayerColor(cc.color(255,255,255,255),size.width,size.height);   
 		this.addChild(layerbg, 0);
@@ -59,7 +62,11 @@ var WinLayer = cc.Layer.extend({
 		Sound.getInstance().playBtn();
 		//cc.director.runScene(new GameScene(GV.CURRENT_LEVEL));
 		var scene = new cc.Scene();
-		scene.addChild(new GameScene(GV.CURRENT_LEVEL));
+		var level = -1;
+		if (!this.isRand) {
+			level = GV.CURRENT_LEVEL;
+		}
+		scene.addChild(new GameScene(level, this.isRand));
 		cc.director.runScene(new cc.TransitionFade(1.2,scene));	
 		
 		
@@ -71,13 +78,15 @@ var WinLayer = cc.Layer.extend({
 });
 
 var WinScene = cc.Scene.extend({
-	ctor:function () {
+	isRand:false,
+	ctor:function (isRand) {
+		this.isRand = isRand
 		this._super();
 	},
 	onEnter:function () {
 		this._super();
 		var layer = new WinLayer();
-		layer.init();
+		layer.init(this.isRand);
 		this.addChild(layer);
 	}
 });
