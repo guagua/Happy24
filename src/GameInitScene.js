@@ -5,6 +5,9 @@ var GameInitLayer = cc.Layer.extend({
         
         var size = cc.winSize;
         
+        GV.UI_HEIGHT_SPACE=size.height/22;
+        
+        
         cc.spriteFrameCache.addSpriteFrames(res.gameui_plist);
         
         initLevelNum();

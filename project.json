@@ -19,8 +19,6 @@
         "src/util/DisplayUtil.js",
         "src/util/CalUtil.js",
         "src/util/LocalStorage.js",
-        "src/util/pomelo-cocos2d-js.js",
-        "src/RankLayer.js",
         "src/SettingLayer.js",
         "src/AboutLayer.js",
         "src/WinScene.js",

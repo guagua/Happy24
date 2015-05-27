@@ -1,14 +1,14 @@
 var Sound = cc.Class.extend({
-		_Silence1:0,
+		_Silence1:1,
 		_Silence2:0,
 		_spin:0,
 		_remove:0,
 		_close:0,
 		ctor:function () {
 				var Silence1=LocalStorage.getInstance().getItem("IS_PLAY_MUSIC");
-			    if(Silence1==1)
+			    if(Silence1==0)
 				{
-				this._Silence1=1;
+				this._Silence1=0;
 				}	    
 	
 			    var Silence2=LocalStorage.getInstance().getItem("IS_PLAY_EFFECT");
@@ -17,8 +17,8 @@ var Sound = cc.Class.extend({
 			    this._Silence2=1;
 			    }	
 			    
-			    cc.log(Silence1);
-			    cc.log(Silence2);
+			   // cc.log(Silence1);
+			    //cc.log(Silence2);
 			    
 			    
 	    },
@@ -27,6 +27,7 @@ var Sound = cc.Class.extend({
 			if(!this._Silence1)
 				cc.audioEngine.playMusic(res.bg_mp3, true);
 		},
+
 //		playSpin:function(){
 //			if(!Sound._Silence2){
 //				if(Sound._spin){
@@ -65,11 +66,29 @@ var Sound = cc.Class.extend({
 				cc.audioEngine.playEffect(res.btn_mp3, false);
 			}
 		},
+		playSel1:function(){
+
+			if(!this._Silence2){
+				cc.audioEngine.playEffect(res.sel1_mp3, false);
+			}
+		},
+		playSel2:function(){
+
+			if(!this._Silence2){
+				cc.audioEngine.playEffect(res.sel2_mp3, false);
+			}
+		},
+		playSel3:function(){
+
+			if(!this._Silence2){
+				cc.audioEngine.playEffect(res.sel3_mp3, false);
+			}
+		},
 		playLose:function(){
 			if(!this._Silence2){
 				
 				if(!this._Silence1)
-				cc.audioEngine.stopMusic(true);
+					cc.audioEngine.stopMusic(true);
 				
 				cc.audioEngine.playEffect(res.lose_mp3, false);
 			}
@@ -78,7 +97,7 @@ var Sound = cc.Class.extend({
 			if(!this._Silence2){
 				
 				if(!this._Silence1)
-				cc.audioEngine.stopMusic(true);
+					cc.audioEngine.stopMusic(true);
 				
 				cc.audioEngine.playEffect(res.win_mp3, false);
 			}

@@ -4,7 +4,18 @@ var WinLayer = cc.Layer.extend({
 		this._super();
 		var size = cc.winSize;
 		this.isRand = isRand;
-		cc.log("isRand:%s", isRand);
+		//cc.log("isRand:%s", isRand);
+		
+		
+		if(!cc.audioEngine.isMusicPlaying())
+		{	
+			var action1=cc.delayTime(2.5);
+			var action2=cc.sequence(action1,cc.callFunc(function(){
+				Sound.getInstance().playBg();	
+			}, this));
+			this.runAction(action2);
+		}
+		
 		
 		var layerbg=new cc.LayerColor(cc.color(255,255,255,255),size.width,size.height);   
 		this.addChild(layerbg, 0);
@@ -43,12 +54,12 @@ var WinLayer = cc.Layer.extend({
 		
 		var continueItem = new cc.MenuItemImage(
 				"#restart_btn.png",
-				"#restart_btn.png",
+				"#restart_btn2.png",
 				this.onContinue,this
 		);
 		var backItem = new cc.MenuItemImage(
 				"#backtomap_btn.png",
-				"#backtomap_btn.png",
+				"#backtomap_btn2.png",
 				this.onBackToMain,this
 		);
 
@@ -62,10 +73,13 @@ var WinLayer = cc.Layer.extend({
 		Sound.getInstance().playBtn();
 		//cc.director.runScene(new GameScene(GV.CURRENT_LEVEL));
 		var scene = new cc.Scene();
-		var level = -1;
+		var level;
 		if (!this.isRand) {
 			level = GV.CURRENT_LEVEL;
-		}
+		}else
+			{
+			level = Math.floor(Math.random() * CU.levelNum.length);
+			}
 		scene.addChild(new GameScene(level, this.isRand));
 		cc.director.runScene(new cc.TransitionFade(1.2,scene));	
 		

@@ -43,8 +43,6 @@ var GameLayer = cc.Layer.extend({
 	init:function (level, isRand) {
 		this._super();
 
-
-
 		if(!cc.audioEngine.isMusicPlaying())
 		{	
 			var action1=cc.delayTime(1.0);
@@ -55,13 +53,15 @@ var GameLayer = cc.Layer.extend({
 		}
 
 		this.isRand = isRand;
-		if (this.isRand == true && level < 0) {
-			this.guankaNum = Math.floor(Math.random() * CU.levelNum.length);
-		} else {
-			this.guankaNum = level;
-		}
+		this.guankaNum = level;	
 		
-		cc.log("level:%d", level)
+//		if (this.isRand == true && level < 0) {
+//			this.guankaNum = Math.floor(Math.random() * CU.levelNum.length);
+//		} else {
+//			this.guankaNum = level;	
+//		}
+		
+		//cc.log("level:%d", level)
 		var size=cc.winSize;
 
 		var layerbg=new cc.LayerColor(cc.color(251,254,238,255),size.width,size.height);  	
@@ -84,11 +84,12 @@ var GameLayer = cc.Layer.extend({
 		});
 		gametitle_bg.addChild(logo_bigsprite);  
 
-		this.startLabel = new cc.LabelTTF(" ", "微软雅黑", 30);
+		this.startLabel = new cc.LabelBMFont(" ", res.gamefont_fnt);
+		this.startLabel.scale=0.8;
 		this.startLabel.setAnchorPoint(0, 0);
-		this.startLabel.setColor(cc.color(0, 0, 0, 1));
+		this.startLabel.setColor(cc.color(58, 62, 70, 255));
 
-		this.startLabel.setPosition(logo_bigsprite.getBoundingBox().width+10,5);
+		this.startLabel.setPosition(logo_bigsprite.getBoundingBox().width+10,0);
 		gametitle_bg.addChild(this.startLabel, 1);
 
 
@@ -96,12 +97,12 @@ var GameLayer = cc.Layer.extend({
 		// 添加暂停按钮
 		var pauseitem = new cc.MenuItemImage(
 				"#pause_btn.png",
-				"#pause_btn.png",
+				"#pause_btn2.png",
 				this.onClickPause,this
 		);
 		pauseitem.anchorX=1;
 		pauseitem.anchorY=0.5;
-		pauseitem.x = size.width-pauseitem.getBoundingBox().width/2-20;	
+		pauseitem.x = size.width-pauseitem.getBoundingBox().width/2;	
 		pauseitem.y = size.height-gametitle_bg.getBoundingBox().height/2;
 
 // var pausemenu = new cc.Menu(pauseitem1);
@@ -112,13 +113,89 @@ var GameLayer = cc.Layer.extend({
 // this.addChild(pausemenu,1);
 
 
+		// 放置提示和重来按钮
+		var tipitem = new cc.MenuItemImage(
+				"#tips_btn.png",
+				"#tips_btn2.png",
+				this.showTip,this
+		);
+		tipitem.anchorY=0;
+		tipitem.x = size.width/4;	
+		tipitem.y = 0;
+
+		var restartitem= new cc.MenuItemImage(
+				"#retry_btn.png",
+				"#retry_btn2.png",
+				this.restartgame,this
+		);
+		restartitem.anchorY=0;
+		restartitem.x = size.width*3/4;	
+		restartitem.y = 0;
+		
+	
+		
+		// 初始化数据
+		this.initData();
+		this.resetWithGuanka(this.guankaNum);
+
+		// 放置数字按钮以及运算符按钮
+		var numbtn=this.numbtns=[];
+		var calbtn=this.calbtns=[];
+		var numbtnbg_x=(size.width-20)/8;
+
+		for(var i=0;i<4;i++)
+		{
+			//运算符按钮
+			calbtn[i]=new cc.MenuItemImage(
+					"#cal_btn_"+i+".png",
+					"#cal_btn_"+i+".png",
+					this.onClickCal,this
+			);
+
+			calbtn[i].x=10+numbtnbg_x*(2*i+1);
+			calbtn[i].y=calbtn[i].getBoundingBox().height/2+restartitem.getBoundingBox().height+GV.UI_HEIGHT_SPACE;		 
+
+			// 标记
+			calbtn[i].mytag=i;
+			
+			//数字按钮
+			
+			numbtn[i]=new Numbtn(this.onClickNum,this,this.numArr[i],i);
+			numbtn[i].x=10+numbtnbg_x*(2*i+1);
+			var pheight=numbtn[i].getBoundingBox().height/2+calbtn[i].y+calbtn[i].getBoundingBox().height/2+GV.UI_HEIGHT_SPACE;
+			numbtn[i].y=pheight;	
+
+			var numbtnbg = new cc.Sprite("#card_shadow.png");
+			numbtnbg.attr({
+				x: 10+numbtnbg_x*(2*i+1),
+				y: pheight,
+				anchorX: 0.5,
+				anchorY: 0.5,
+				scale: 1
+			});
+			this.addChild(numbtnbg); 
+
+			// 标记
+			numbtn[i].mytag=i;	
+		}
+		
+		
+		// 提示显示
+		this.resultLabel = new cc.LabelTTF("提示：","Arial", 30);
+		this.resultLabel.setAnchorPoint(0, 0);
+		this.resultLabel.setColor(cc.color(0, 0, 0, 1));
+		this.resultLabel.anchorX=0;
+		this.resultLabel.anchorY=0;
+		this.resultLabel.setPosition(size.width/6, numbtn[0].y+numbtn[0].getBoundingBox().height/2+20+GV.UI_HEIGHT_SPACE/3);
+		this.addChild(this.resultLabel, 1);
+		
 
 		// 放置数字运算显示框
 
 		var showbg = new cc.Sprite("#display_bg.png");
 		showbg.attr({
 			x: size.width/2,
-			y: size.height*2/3,
+			y: showbg.getBoundingBox().height/2+this.resultLabel.y+30+GV.UI_HEIGHT_SPACE/3,
 			anchorX: 0.5,
 			anchorY: 0.5,
 			scale: 1
@@ -126,16 +203,7 @@ var GameLayer = cc.Layer.extend({
 		this.addChild(showbg,1); 
 
 
-		this.numLabel = new cc.LabelTTF("", "微软雅黑",25);
-		this.numLabel  .attr({
-			x: showbg.getBoundingBox().width/2,
-			y: showbg.getBoundingBox().height/2,
-			anchorX: 0.5,
-			anchorY: 0.5,
-			color: cc.color(0,0,0),
-			scale: 1
-		});
-		showbg.addChild(this.numLabel ,1);
+
 
 		// 添加保存按钮
 		var saveitem = new cc.MenuItemImage(
@@ -146,7 +214,18 @@ var GameLayer = cc.Layer.extend({
 		saveitem.anchorX=0;
 		saveitem.x = showbg.x-showbg.getBoundingBox().width/2+10;	
 		saveitem.y = showbg.y;
-
+		
+		
+		this.numLabel = new cc.LabelBMFont("", res.gamefont_fnt,showbg.getBoundingBox().width-saveitem.getBoundingBox().width,cc.TEXT_ALIGNMENT_CENTER);
+		this.numLabel  .attr({
+			x: showbg.getBoundingBox().width/2,
+			y: showbg.getBoundingBox().height/2,
+			anchorX: 0.5,
+			anchorY: 0.5,
+			color: cc.color(58, 62, 70),
+			scale: 0.8
+		});
+		showbg.addChild(this.numLabel ,1);
 // var savemenu = new cc.Menu(saveitem1);
 // savemenu.anchorX=0;
 // savemenu.anchorY=0;
@@ -156,69 +235,7 @@ var GameLayer = cc.Layer.extend({
 
 
 
-
-
-		// 放置提示和重来按钮
-
-		var tipitem = new cc.MenuItemImage(
-				"#tips_btn.png",
-				"#tips_btn.png",
-				this.showTip,this
-		);
-		tipitem.anchorY=0;
-		tipitem.x = size.width/4;	
-		tipitem.y = 0;
-
-		var restartitem= new cc.MenuItemImage(
-				"#retry_btn.png",
-				"#retry_btn.png",
-				this.restartgame,this
-		);
-		restartitem.anchorY=0;
-		restartitem.x = size.width*3/4;	
-		restartitem.y = 0;
-
-		// 初始化数据
-		this.initData();
-		this.resetWithGuanka(this.guankaNum);
-
-		// 放置数字按钮以及运算符按钮
-
-		var numbtn=this.numbtns=[];
-		var calbtn=this.calbtns=[];
-		var numbtnbg_x=(size.width-20)/8;
-
-		for(var i=0;i<4;i++)
-		{
-			numbtn[i]=new Numbtn(this.onClickNum,this,this.numArr[i],i);
-			numbtn[i].x=10+numbtnbg_x*(2*i+1);
-			numbtn[i].y=size.height*2/5;	
-
-			var numbtnbg = new cc.Sprite("#card_shadow.png");
-			numbtnbg.attr({
-				x: 10+numbtnbg_x*(2*i+1),
-				y: size.height*2/5,
-				anchorX: 0.5,
-				anchorY: 0.5,
-				scale: 1
-			});
-			this.addChild(numbtnbg); 
-
-			// 标记
-			numbtn[i].mytag=i;
-
-			calbtn[i]=new cc.MenuItemImage(
-					"#cal_btn_"+i+".png",
-					"#cal_btn_"+i+".png",
-					this.onClickCal,this
-			);
-
-			calbtn[i].x=10+numbtnbg_x*(2*i+1);
-			calbtn[i].y=size.height/5;		 
-
-			// 标记
-			calbtn[i].mytag=i;
-		}
+		
 
 		var menu = new cc.Menu(pauseitem,saveitem,tipitem,restartitem,numbtn[0],numbtn[1],numbtn[2],numbtn[3],calbtn[0],calbtn[1],calbtn[2],calbtn[3]);
 
@@ -228,19 +245,63 @@ var GameLayer = cc.Layer.extend({
 		menu.y = 0;	
 		this.addChild(menu,99);
 
-		// 提示显示
-		this.resultLabel = new cc.LabelTTF("提示：", "微软雅黑", 30);
-		this.resultLabel.setAnchorPoint(0, 0);
-		this.resultLabel.setColor(cc.color(0, 0, 0, 1));
-		this.resultLabel.anchorX=0;
-		this.resultLabel.anchorY=1;
-
-		this.resultLabel.setPosition(size.width/6, showbg.y-showbg.getBoundingBox().height/2-15);
-		this.addChild(this.resultLabel, 1);
+		
+		
+		
+		
+		
+		// 添加点击监听
+		cc.eventManager.addListener({
+			event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+			onTouchesBegan: this.onTouchBegan.bind(this)
+			//onTouchesMoved: this.onToucheMoved.bind(this)
+			//onTouchesEnded: this.onTouchEnded.bind(this)
+		}, this); 
+		
+		
+		
+		
+		
+		
+		
+		
 	},
-
+	onTouchBegan:function(touches, event){
+		if(this.firstPic==-1)
+		return;
+		
+		if(this.numbtns[this.firstPic].State==1)
+		{
+			Sound.getInstance().playSel2();
+			this.numbtns[this.firstPic].setState(0);
+			this.numLabel.setString("");
+			this.calStep=0;
+		}
+		
+		
+		
+		return false;
+	},
 	onClickSave:function() {
-		cc.log("test:onClickSave");
+		//cc.log("test:onClickSave");
+		
+		
+		if(this.firstPic==-1)
+			return;
+
+		if(this.numbtns[this.firstPic].State==1)
+		{
+			Sound.getInstance().playSel2();
+			this.numbtns[this.firstPic].setState(0);
+			this.numLabel.setString("");
+			this.calStep=0;
+		}
+		
+		
+		
+		
+		
+		
 	},
 	
 	onClickPause:function() {
@@ -281,6 +342,7 @@ var GameLayer = cc.Layer.extend({
 		{
 		case 0:
 			// firstPic数字可选
+			Sound.getInstance().playSel1();
 			sender.onselect();
 			this.firstPic=sender.mytag;
 			this.calStep++;
@@ -291,9 +353,10 @@ var GameLayer = cc.Layer.extend({
 			break;
 		case 1:
 			// firstPic数字可取消
+			
 			if(sender.mytag!=this.firstPic)
 				return;
-
+			Sound.getInstance().playSel2();
 			sender.onselect();
 			this.firstPic=-1;
 			this.calStep--;
@@ -303,7 +366,7 @@ var GameLayer = cc.Layer.extend({
 
 			if(sender.mytag==this.firstPic)
 				return;
-
+			Sound.getInstance().playSel1();
 			// secondPic数字可选
 			sender.onselect();
 			this.secondPic=sender.mytag;
@@ -314,14 +377,15 @@ var GameLayer = cc.Layer.extend({
 			// var pshownum=eval(calreslut);
 			// pshownum经过一定处理
 			//
-
+			var pnum=eval(calreslut);
+			
 			this.numLabel.setString(calreslut);
 
 			this.calStep=1;
 			this.gameStep++;
 			if(this.gameStep==3){
 				// 游戏结束
-				var pnum=eval(calreslut);
+				//var pnum=eval(calreslut);
 				if(pnum>=23.999&&pnum<=24.001) 
 				{
 					// youwin
@@ -330,7 +394,7 @@ var GameLayer = cc.Layer.extend({
 					if (!this.isRand) {
 						GV.setCurrentLevel((this.guankaNum+1));
 					}
-					cc.log("youwin"+pnum);
+					//cc.log("youwin"+pnum);
 					cc.director.runScene(new WinScene(this.isRand));
 
 				}else
@@ -348,9 +412,16 @@ var GameLayer = cc.Layer.extend({
 			// 置secondPic为状态2 firstPic为计算结果
 			this.numbtns[this.secondPic].setState(2);
 			this.secondPic=-1;
+			
+			//if(pnum.toFixed(2))
+			if(pnum*100%1>=0.1)
+			pnum=pnum.toFixed(2);
+			//cc.log(pnum*100%1);
+			
+			this.numbtns[this.firstPic].setString(pnum);
 
-			this.numbtns[this.firstPic].setString(calreslut);
-
+			this.numbtns[this.firstPic].setAboveString(calreslut);
+			
 
 
 
@@ -367,12 +438,14 @@ var GameLayer = cc.Layer.extend({
 		if(this.calStep==1)
 		{
 			// 可选
+			Sound.getInstance().playSel3();
 			this.calNum=this.calStringArr[sender.mytag];
 			this.calStep++;
 
 		}else if(this.calStep==2)
 		{
 			// 可替换
+			Sound.getInstance().playSel3();
 			this.calNum=this.calStringArr[sender.mytag];		
 		}
 
@@ -394,7 +467,11 @@ var GameLayer = cc.Layer.extend({
 
 	restartgame:function() {
 		Sound.getInstance().playBtn();
-		cc.director.runScene(new GameScene(this.guankaNum, this));
+		
+		//this.resetWithGuanka(this.guankaNum);
+		cc.director.runScene(new GameScene(this.guankaNum, this.isRand));
+		
+		//cc.director.runScene(new GameScene(this.guankaNum, this));
 
 	},
 
@@ -440,9 +517,11 @@ var GameLayer = cc.Layer.extend({
 		var tempArr = CU.levelNum[this.guankaNum];
 		var result;
 		if (this.isRand == true) {
-			result = "随机模式 难度系数:" + tempArr[0];
+			//result = "随机模式 难度系数:" + tempArr[0];
+			result = "随机模式";
 		} else {
-			result = "关卡:" + (this.guankaNum) +  " 难度系数:" + tempArr[0];
+			//result = "关卡:" + (this.guankaNum) +  " 难度系数:" + tempArr[0];
+			result = "第" + (this.guankaNum) + "关";
 		}
 		this.startLabel.setString(result);
 		
@@ -493,7 +572,7 @@ var GameScene = cc.Scene.extend({
 		this._super();
 		this.level = level;
 		this.isRand = isRand;
-		cc.log("level:%d", level);
+		//cc.log("level:%d", level);
 	},
 	onEnter:function () {
 		this._super();

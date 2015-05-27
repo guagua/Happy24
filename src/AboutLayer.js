@@ -125,10 +125,18 @@ var AboutLayer = cc.Layer.extend({
 	},
 	
 	closeSetting:function () {
+		Sound.getInstance().playBtn();
 		this.removeFromParent(true);
 	},
 	
 	enterWebClick:function() {
+
+		if (cc.sys.browserType != null) {
+			//html5 浏览器
+			Sound.getInstance().playBtn();
+			window.location.href='http://www.zhehekeji.com';
+		}
+		
 //		openURL("www.zhehekeji.com");
 	}
 

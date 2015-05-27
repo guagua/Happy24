@@ -25,15 +25,15 @@ var GameSelectLayer = cc.Layer.extend({
 		this.addChild(layerbg,-1); 
 
 		//标题
-		var map_titlesprite = new cc.Sprite("#map_title.png");
-		map_titlesprite.attr({
-			x: 0,
-			y: -10,
-			anchorX: 0,
-			anchorY: 1,
-			scale: 0.5
-		});
-		gamecontrol_bg.addChild(map_titlesprite); 
+//		var map_titlesprite = new cc.Sprite("#map_title.png");
+//		map_titlesprite.attr({
+//			x: 0,
+//			y: -10,
+//			anchorX: 0,
+//			anchorY: 1,
+//			scale: 0.5
+//		});
+//		gamecontrol_bg.addChild(map_titlesprite); 
 
 
 
@@ -51,7 +51,7 @@ var GameSelectLayer = cc.Layer.extend({
 		//添加设置按钮
 		var settingsitem1 = new cc.MenuItemImage(
 				"#settings.png",
-				"#settings.png",
+				"#settings2.png",
 				this.onClickSettings,this
 		);
 		settingsitem1.anchorX=1;
@@ -69,7 +69,7 @@ var GameSelectLayer = cc.Layer.extend({
 		//添加随机模式按钮
 		var item1 = new cc.MenuItemImage(
 				"#random_btn.png",
-				"#random_btn.png",
+				"#random_btn2.png",
 				this.onClickStart,this
 		);
 		item1.anchorX=1;
@@ -150,7 +150,9 @@ var GameSelectLayer = cc.Layer.extend({
 	},
 	onClickStart:function() {
 		Sound.getInstance().playBtn();
-		cc.director.runScene(new GameScene(-1, true));
+		
+		
+		cc.director.runScene(new GameScene(Math.floor(Math.random() * CU.levelNum.length), true));
 	},
 	onClickSettings:function() {	
 		Sound.getInstance().playBtn();
@@ -189,9 +191,10 @@ var GameSelectLayer = cc.Layer.extend({
 			{
 
 				if(this.gamecheckpoints[i]._num==GV.CURRENT_LEVEL)
-					Sound.getInstance().playBtn();
+				{
+				Sound.getInstance().playBtn();
 				cc.director.runScene(new GameScene(GV.CURRENT_LEVEL, false));
-
+				}
 				return false;
 			}
 

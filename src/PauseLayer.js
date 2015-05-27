@@ -40,7 +40,7 @@ var PauseLayer = cc.Layer.extend({
 		var white_bg = new cc.Sprite("res/set_bg.png");
 		white_bg.attr({
 			x: bgLayer2.getBoundingBox().width/2,
-			y: bgLayer2.getBoundingBox().height*3/5,
+			y: bgLayer2.getBoundingBox().height*4/7,
 			anchorX: 0.5,
 			anchorY: 0.5
 		});
@@ -51,7 +51,7 @@ var PauseLayer = cc.Layer.extend({
 		//添加继续游戏按钮
 		var item1 = new cc.MenuItemImage(
 				"#restart_btn.png",
-				"#restart_btn.png",
+				"#restart_btn2.png",
 				this.closeSetting,this
 		);
 
@@ -163,7 +163,7 @@ var PauseLayer = cc.Layer.extend({
 		//添加返回地图按钮
 		var aboutitem1 = new cc.MenuItemImage(
 				"#backtomap_btn.png",
-				"#backtomap_btn.png",
+				"#backtomap_btn2.png",
 				this.backtomap,this
 		);
 
@@ -198,11 +198,13 @@ var PauseLayer = cc.Layer.extend({
 	},
 
 	closeSetting:function () {
+		Sound.getInstance().playBtn();
 		this.setVisible(false);
 		cc.eventManager.resumeTarget(this.getParent(),true);
 	},
 
 	backtomap:function () {
+		Sound.getInstance().playBtn();
 		cc.director.runScene(new GameSelectScene());
 	}
 

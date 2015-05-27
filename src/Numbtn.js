@@ -4,6 +4,7 @@ var Numbtn = cc.MenuItemImage.extend({
 	numLabel:null,
 	num:null,//显示的数字
 	mytag:null,//标记
+	abovenumLabel:null,//在上端显示全运算式子
 	ctor:function (three, four,five,six) {
 		
 	
@@ -11,25 +12,52 @@ var Numbtn = cc.MenuItemImage.extend({
 	this._super("#card_bg.png", "#card_bg.png", three, four);	
 	this.setTag(six);
 	
-	this.numLabel = new cc.LabelTTF(""+five, "微软雅黑",50);
+	this.numLabel = new cc.LabelBMFont(""+five, res.gamefont_fnt,this.getBoundingBox().width,cc.TEXT_ALIGNMENT_CENTER);
 	this.numLabel .attr({
 		x: this.getBoundingBox().width/2,
 		y: this.getBoundingBox().height/2,
 		anchorX: 0.5,
 		anchorY: 0.5,
-		color: cc.color(0,0,0),
+		color: cc.color(238,79,54),
 		scale: 1
 	});
 	this.addChild(this.numLabel ,1);
 	
 
+	this.abovenumLabel = new  cc.LabelTTF("","Arial", 30);
+	this.abovenumLabel .attr({
+		x: this.getBoundingBox().width/2,
+		y: this.getBoundingBox().height*3/4,
+		anchorX: 0.5,
+		anchorY: 0.5,
+		color: cc.color(238,79,54),
+		scale: 1
+	});
+	this.addChild(this.abovenumLabel ,1);
 	
+
 	},
 	setString:function(five){
-		this.num=five
-		this.numLabel.setString(""+five);
+		//this.num=five;
+		var fivestring=""+five;
+		if(fivestring.length>=3)
+		this.numLabel.scale=0.8;
+		else
+		this.numLabel.scale=1;
+		
+		
+		this.numLabel.setString(fivestring);
+		
+		
 		
 	},
+	setAboveString:function(five){
+		this.num=five;
+		this.abovenumLabel.setString(""+five);
+
+	},
+	
+	
 	onselect:function(){
 		if(this.State==0)	
 		{
@@ -59,6 +87,7 @@ var Numbtn = cc.MenuItemImage.extend({
 			break;
 		case 2:
 			this.numLabel.setVisible(false);
+			this.abovenumLabel.setVisible(false);
 			//覆盖层
 			var sprite = new cc.Sprite("#card_back.png");
 			sprite.attr({

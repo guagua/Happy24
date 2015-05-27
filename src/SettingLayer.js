@@ -168,7 +168,7 @@ var SettingLayer = cc.Layer.extend({
 		//添加关于我们按钮
 		var aboutitem1 = new cc.MenuItemImage(
 				"#about_us_btn.png",
-				"#about_us_btn.png",
+				"#about_us_btn2.png",
 				this.aboutClick,this
 		);
 
@@ -186,20 +186,24 @@ var SettingLayer = cc.Layer.extend({
 		
 	},
 	valueChanged:function (sender, controlEvent) {
+		Sound.getInstance().playBtn();
 		Sound.getInstance().bgOnOff();
 	
 	
 	},
 	valueChanged2:function (sender, controlEvent) {
+		Sound.getInstance().playBtn();
 		Sound.getInstance().effectOnOff();
 	},
 	
 	closeSetting:function () {
+		Sound.getInstance().playBtn();
 		this.setVisible(false);
 		cc.eventManager.resumeTarget(this.getParent(),true);
 	},
 		
 	aboutClick:function () {
+		Sound.getInstance().playBtn();
 		var aboutLayer = new AboutLayer();
 		this.addChild(aboutLayer, 300);
 	}	

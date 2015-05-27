@@ -1,6 +1,10 @@
 var res = {
 		bg_mp3 : "res/sound/bg3.mp3",
 		btn_mp3 : "res/sound/btn.mp3",
+		sel1_mp3 : "res/sound/sel1.mp3",
+		sel2_mp3 : "res/sound/sel2.mp3",
+		sel3_mp3 : "res/sound/sel3.mp3",
+		
 		lose_mp3 : "res/sound/lose.mp3",
 		win_mp3 : "res/sound/win.mp3",
 		
@@ -8,6 +12,10 @@ var res = {
 		set_bg_png:"res/set_bg.png",
 		gameui_plist:"res/gameui.plist",
 		gameui_png:"res/gameui.png",
+		
+		gamefont_fnt:"res/gamefont.fnt",
+		gamefont_png:"res/gamefont.png",
+		
 		switch_mv1_png:"res/switch_mv1.png",
 		switch_mv2_png:"res/switch_mv2.png",
 		switch_mask_png:"res/switch_mask.png",

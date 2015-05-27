@@ -1,5 +1,7 @@
 
 var GV = GV || {};
+//ui之间的间隔距离
+GV.UI_HEIGHT_SPACE=20;
 
 
 GV.BOX_WIDTH = 170;
