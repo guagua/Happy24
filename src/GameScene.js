@@ -392,6 +392,8 @@ var GameLayer = cc.Layer.extend({
 
 					Sound.getInstance().playWin();
 					if (!this.isRand) {
+						var nextLevel = this.guankaNum + 1;
+						if (nextLevel == CU.levelNum.length) nextLevel = 0;
 						GV.setCurrentLevel((this.guankaNum+1));
 					}
 					//cc.log("youwin"+pnum);

@@ -77,9 +77,10 @@ var WinLayer = cc.Layer.extend({
 		if (!this.isRand) {
 			level = GV.CURRENT_LEVEL;
 		}else
-			{
+		{
 			level = Math.floor(Math.random() * CU.levelNum.length);
-			}
+			if(level == 0) level = 1;//第0关默认为引导关卡
+		}
 		scene.addChild(new GameScene(level, this.isRand));
 		cc.director.runScene(new cc.TransitionFade(1.2,scene));	
 		
