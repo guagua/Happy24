@@ -160,7 +160,10 @@ var GameSelectLayer = cc.Layer.extend({
 		{
 			if(!this._SettingLayer.Visible)
 			{
+				this._SettingLayer.y=0;
 				this._SettingLayer.setVisible(true);
+				
+				
 				//暂停页面按钮功能   
 				cc.eventManager.pauseTarget(this, true);
 				//开启设置层按钮功能

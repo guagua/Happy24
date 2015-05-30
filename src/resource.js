@@ -16,20 +16,12 @@ var res = {
 		gamefont_fnt:"res/gamefont.fnt",
 		gamefont_png:"res/gamefont.png",
 		
-		switch_mv1_png:"res/switch_mv1.png",
-		switch_mv2_png:"res/switch_mv2.png",
-		switch_mask_png:"res/switch_mask.png",
-		switch_off_png:"res/switch_off.png",
-		switch_on_png:"res/switch_on.png",
-		
-			
-		about_title_png:"res/about_title.png",
-		dark_bg_png:"res/dark_bg.png",
-		enter_web_png:"res/enter_web.png",
-		line_png:"res/line.png",
-		logo_png:"res/logo.png",
-		weixin_png:"res/weixin.png"
-			
+		switch_mv1_png:"res/switch/switch_mv1.png",
+		switch_mv2_png:"res/switch/switch_mv2.png",
+		switch_mask_png:"res/switch/switch_mask.png",
+		switch_off_png:"res/switch/switch_off.png",
+		switch_on_png:"res/switch/switch_on.png"
+
 		
 };
 

@@ -1,5 +1,7 @@
 //设置层
 var SettingLayer = cc.Layer.extend({
+	switchControl1:null,
+	switchControl2:null,
 	ctor:function(){
 		this._super();
 		//this.retain();
@@ -90,7 +92,7 @@ var SettingLayer = cc.Layer.extend({
 		
 		
 		//
-		var switchControl = new cc.ControlSwitch
+		this.switchControl1 = new cc.ControlSwitch
 		(
 				new cc.Sprite(res.switch_mask_png),
 				new cc.Sprite(res.switch_on_png),
@@ -99,17 +101,17 @@ var SettingLayer = cc.Layer.extend({
 				new cc.LabelTTF("off", "Arial-BoldMT", 32),
 				new cc.LabelTTF("on", "Arial-BoldMT", 32)
 		);
-		switchControl.x = white_bg.getBoundingBox().width*2/3;
-		switchControl.y = white_bg.getBoundingBox().height*5/6;
+		this.switchControl1.x = white_bg.getBoundingBox().width*2/3;
+		this.switchControl1.y = white_bg.getBoundingBox().height*5/6;
 		
 
 		//if (getIsPlayMusic()==1) {
 		if (!Sound.getInstance()._Silence1) {
-			switchControl.setOn(true, false);
+			this.switchControl1.setOn(true, false);
 		} else {
-			switchControl.setOn(false, false);
+			this.switchControl1.setOn(false, false);
 		}
-		white_bg.addChild(switchControl);
+		white_bg.addChild(this.switchControl1);
 		
 		
 		
@@ -137,7 +139,7 @@ var SettingLayer = cc.Layer.extend({
 		
 		
 		//
-		var switchControl2 = new cc.ControlSwitch
+		this.switchControl2 = new cc.ControlSwitch
 		(
 				new cc.Sprite(res.switch_mask_png),
 				new cc.Sprite(res.switch_on_png),
@@ -146,22 +148,22 @@ var SettingLayer = cc.Layer.extend({
 				new cc.LabelTTF("off", "Arial-BoldMT", 32),
 				new cc.LabelTTF("on", "Arial-BoldMT", 32)
 		);
-		switchControl2.x = white_bg.getBoundingBox().width*2/3;
-		switchControl2.y = white_bg.getBoundingBox().height*4/7;
+		this.switchControl2.x = white_bg.getBoundingBox().width*2/3;
+		this.switchControl2.y = white_bg.getBoundingBox().height*4/7;
 		
 		if (!Sound.getInstance()._Silence2) {
-			switchControl2.setOn(true, false);
+			this.switchControl2.setOn(true, false);
 		} else {
-			switchControl2.setOn(false, false);
+			this.switchControl2.setOn(false, false);
 		}
-		white_bg.addChild(switchControl2);
+		white_bg.addChild(this.switchControl2);
 		
 		
 		
 		
-		switchControl.addTargetWithActionForControlEvents(this, this.valueChanged, cc.CONTROL_EVENT_VALUECHANGED);
+		this.switchControl1.addTargetWithActionForControlEvents(this, this.valueChanged, cc.CONTROL_EVENT_VALUECHANGED);
 
-		switchControl2.addTargetWithActionForControlEvents(this, this.valueChanged2, cc.CONTROL_EVENT_VALUECHANGED);
+		this.switchControl2.addTargetWithActionForControlEvents(this, this.valueChanged2, cc.CONTROL_EVENT_VALUECHANGED);
 		
 		
 		
@@ -199,6 +201,7 @@ var SettingLayer = cc.Layer.extend({
 	closeSetting:function () {
 		Sound.getInstance().playBtn();
 		this.setVisible(false);
+		this.y=-2000;
 		cc.eventManager.resumeTarget(this.getParent(),true);
 	},
 		

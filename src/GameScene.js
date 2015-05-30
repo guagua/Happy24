@@ -28,6 +28,14 @@ var GameLayer = cc.Layer.extend({
 	calbtns:null,// 运算符按钮数组
 
 	_PauseLayer:null,// 暂停界面
+	
+
+	isGuide:false,//是否需要引导
+	GuideSprites:null,//引导箭头数组
+	showyindao:null,//引导图文
+
+	
+	
 	initData:function() {
 		this.numBoxArr = [];
 		this.calBoxArr = [];
@@ -54,6 +62,8 @@ var GameLayer = cc.Layer.extend({
 
 		this.isRand = isRand;
 		this.guankaNum = level;	
+		if(level==0)
+		this.isGuide=true;
 		
 //		if (this.isRand == true && level < 0) {
 //			this.guankaNum = Math.floor(Math.random() * CU.levelNum.length);
@@ -105,12 +115,6 @@ var GameLayer = cc.Layer.extend({
 		pauseitem.x = size.width-pauseitem.getBoundingBox().width/2;	
 		pauseitem.y = size.height-gametitle_bg.getBoundingBox().height/2;
 
-// var pausemenu = new cc.Menu(pauseitem1);
-// pausemenu.anchorX=0;
-// pausemenu.anchorY=0;
-// pausemenu.x = 0;
-// pausemenu.y = 0;
-// this.addChild(pausemenu,1);
 
 
 		// 放置提示和重来按钮
@@ -183,12 +187,9 @@ var GameLayer = cc.Layer.extend({
 		// 提示显示
 		this.resultLabel = new cc.LabelTTF("提示：","Arial", 30);
 		this.resultLabel.setAnchorPoint(0, 0);
-		this.resultLabel.setColor(cc.color(0, 0, 0, 1));
-		this.resultLabel.anchorX=0;
-		this.resultLabel.anchorY=0;
+		this.resultLabel.setColor(cc.color(0, 0, 0, 255));
 		this.resultLabel.setPosition(size.width/6, numbtn[0].y+numbtn[0].getBoundingBox().height/2+20+GV.UI_HEIGHT_SPACE/3);
 		this.addChild(this.resultLabel, 1);
-		
 
 		// 放置数字运算显示框
 
@@ -203,11 +204,10 @@ var GameLayer = cc.Layer.extend({
 		this.addChild(showbg,1); 
 
 
-
-
 		// 添加保存按钮
 		var saveitem = new cc.MenuItemImage(
-				"#save_btn.png",
+				"#save_btn3.png",
+				//"#save_btn.png",
 				"#save_btn_grey.png",
 				this.onClickSave,this
 		);
@@ -226,16 +226,7 @@ var GameLayer = cc.Layer.extend({
 			scale: 0.8
 		});
 		showbg.addChild(this.numLabel ,1);
-// var savemenu = new cc.Menu(saveitem1);
-// savemenu.anchorX=0;
-// savemenu.anchorY=0;
-// savemenu.x = 0;
-// savemenu.y = 0;
-// showbg.addChild(savemenu,1);
 
-
-
-		
 
 		var menu = new cc.Menu(pauseitem,saveitem,tipitem,restartitem,numbtn[0],numbtn[1],numbtn[2],numbtn[3],calbtn[0],calbtn[1],calbtn[2],calbtn[3]);
 
@@ -245,10 +236,7 @@ var GameLayer = cc.Layer.extend({
 		menu.y = 0;	
 		this.addChild(menu,99);
 
-		
-		
-		
-		
+
 		
 		// 添加点击监听
 		cc.eventManager.addListener({
@@ -259,13 +247,149 @@ var GameLayer = cc.Layer.extend({
 		}, this); 
 		
 		
+		this.showyindao = new cc.Sprite("#yindao.png");
+		this.showyindao.attr({
+			x: showbg.getBoundingBox().width,
+			y: showbg.getBoundingBox().height,
+			anchorX: 1,
+			anchorY: 1,
+			scale: 1
+		});
+		showbg.addChild(this.showyindao,1); 
+		this.showyindao.setVisible(false);
 		
-		
-		
-		
-		
+		//增加引导
+		if(this.isGuide)
+		{
+			this.showyindao.setVisible(true);
+			this.addGuide(0);
+		}
+
+
 		
 	},
+	addGuide:function(Guidestate){
+		if(!this.isGuide)
+		return;
+		
+
+			if(this.GuideSprites==null)
+			{
+				this.GuideSprites=[];
+				for(var i=0;i<4;i++)
+				{
+					this.GuideSprites[i]=new cc.Sprite("#yindao_down1.png");
+				this.GuideSprites[i].attr({
+					anchorX: 0.5,
+					anchorY: 0,
+					scale: 1
+				});
+
+				this.addChild(this.GuideSprites[i],100); 
+				this.GuideSprites[i].setVisible(false);
+			   }
+				
+				for(var i=4;i<6;i++)
+				{
+					this.GuideSprites[i]=new cc.Sprite("#yindao_down2.png");
+					this.GuideSprites[i].attr({
+						anchorX: 0.5,
+						anchorY: 0,
+						scale: 1
+					});
+					
+					this.addChild(this.GuideSprites[i],100); 
+					this.GuideSprites[i].setVisible(false);
+				}
+				
+				
+				for(var i=0;i<6;i++)
+				{
+					var action0=cc.moveBy(0.5,0,-30);
+					var action1=cc.moveBy(0.2,0,30);
+					var action2=cc.sequence(action0,action1);
+					var repeat1 = new cc.RepeatForever(action2);
+					this.GuideSprites[i].runAction(repeat1);
+	
+				}
+	
+		
+			}
+		var size=cc.winSize;
+
+		switch(Guidestate)
+		{
+		case 0:
+		//黄色箭头隐藏
+			this.GuideSprites[4].setVisible(false);
+			this.GuideSprites[5].setVisible(false);
+			
+
+		 //添加4个绿色箭头指向数字
+			for(var i=0;i<4;i++)
+				{
+			this.GuideSprites[i].x=this.numbtns[i].x;
+			this.GuideSprites[i].y=this.numbtns[i].y;
+			
+			if(this.numbtns[i].State==0)
+				this.GuideSprites[i].setVisible(true);
+			else
+				this.GuideSprites[i].setVisible(false);
+			
+				//cc.log("Visible:",this.GuideSprites[i].isVisible());
+			
+				}
+
+			
+		    break;
+		case 1:
+			//添加4个绿色箭头指向运算符
+			for(var i=0;i<4;i++)
+			{
+				this.GuideSprites[i].x=this.calbtns[i].x;
+				this.GuideSprites[i].y=this.calbtns[i].y;
+				this.GuideSprites[i].setVisible(true);
+			}
+		  //添加指向选中数字键   和  指向空白和向下 的黄色箭头
+		//数字键
+			this.GuideSprites[4].x=this.numbtns[this.firstPic].x;
+			this.GuideSprites[4].y=this.numbtns[this.firstPic].y;
+			this.GuideSprites[4].setVisible(true);
+			
+		 //黄色指向空白地
+			this.GuideSprites[5].x=size.width-100;
+			this.GuideSprites[5].y=this.resultLabel.y+50;
+			this.GuideSprites[5].setVisible(true);
+			
+			break;
+		case 2:
+			//添加4个绿色箭头指向数字  已被选的隐藏
+			for(var i=0;i<4;i++)
+			{
+				this.GuideSprites[i].x=this.numbtns[i].x;
+				this.GuideSprites[i].y=this.numbtns[i].y;
+
+				if(this.numbtns[i].State==0)
+					this.GuideSprites[i].setVisible(true);
+				else
+					this.GuideSprites[i].setVisible(false);
+			}
+			
+			
+			//黄色指向空白地
+			this.GuideSprites[5].x=size.width-100;
+			this.GuideSprites[5].y=this.resultLabel.y+100;
+			this.GuideSprites[5].setVisible(true);
+
+			this.GuideSprites[4].setVisible(false);
+			
+			break;
+		
+		}
+
+		
+	},
+
 	onTouchBegan:function(touches, event){
 		if(this.firstPic==-1)
 		return;
@@ -278,28 +402,51 @@ var GameLayer = cc.Layer.extend({
 			this.calStep=0;
 		}
 		
-		
+		this.addGuide(0);
 		
 		return false;
 	},
 	onClickSave:function() {
-		//cc.log("test:onClickSave");
+		//cc.log("test:onClickSave");	
+//		if(this.firstPic==-1)
+//			return;
+//
+//		if(this.numbtns[this.firstPic].State==1)
+//		{
+//			Sound.getInstance().playSel2();
+//			this.numbtns[this.firstPic].setState(0);
+//			this.numLabel.setString("");
+//			this.calStep=0;
+//		}
 		
-		
-		if(this.firstPic==-1)
-			return;
-
-		if(this.numbtns[this.firstPic].State==1)
+		if(this.isGuide)
 		{
-			Sound.getInstance().playSel2();
-			this.numbtns[this.firstPic].setState(0);
-			this.numLabel.setString("");
-			this.calStep=0;
+		this.isGuide=false;	
+		
+		this.showyindao.setVisible(false);
+		
+		for(var i=0;i<6;i++)
+		{
+			
+			this.GuideSprites[i].removeFromParent(true);
+
 		}
 		
+		this.GuideSprites=null;
 		
-		
-		
+			
+		}else
+		{
+			this.isGuide=true;	
+			
+			this.showyindao.setVisible(true);
+			
+
+			this.addGuide(this.calStep);
+
+			
+			
+		}
 		
 		
 	},
@@ -310,6 +457,7 @@ var GameLayer = cc.Layer.extend({
 		{
 			if(!this._PauseLayer.Visible)
 			{
+				this._PauseLayer.y=0;
 				this._PauseLayer.setVisible(true);
 				// 暂停页面按钮功能
 				cc.eventManager.pauseTarget(this, true);
@@ -323,7 +471,7 @@ var GameLayer = cc.Layer.extend({
 			cc.eventManager.pauseTarget(this, true);
 
 			this._PauseLayer=new PauseLayer();
-			this.addChild(this._PauseLayer,100);
+			this.addChild(this._PauseLayer,101);
 
 		}
 
@@ -349,7 +497,7 @@ var GameLayer = cc.Layer.extend({
 
 			this.numLabel.setString(this.numbtns[this.firstPic].num);
 
-
+			this.addGuide(1);
 			break;
 		case 1:
 			// firstPic数字可取消
@@ -361,6 +509,8 @@ var GameLayer = cc.Layer.extend({
 			this.firstPic=-1;
 			this.calStep--;
 			this.numLabel.setString("");
+			
+			this.addGuide(0);
 			break;
 		case 2:
 
@@ -393,8 +543,10 @@ var GameLayer = cc.Layer.extend({
 					Sound.getInstance().playWin();
 					if (!this.isRand) {
 						var nextLevel = this.guankaNum + 1;
-						if (nextLevel == CU.levelNum.length) nextLevel = 0;
-						GV.setCurrentLevel((this.guankaNum+1));
+						if (nextLevel == CU.levelNum.length) 
+							nextLevel = 0;	
+						
+						GV.setCurrentLevel(nextLevel);
 					}
 					//cc.log("youwin"+pnum);
 					cc.director.runScene(new WinScene(this.isRand));
@@ -424,9 +576,9 @@ var GameLayer = cc.Layer.extend({
 
 			this.numbtns[this.firstPic].setAboveString(calreslut);
 			
-
-
-
+			this.calNum=-1;
+			
+			this.addGuide(1);
 			break;
 
 		}
@@ -454,7 +606,7 @@ var GameLayer = cc.Layer.extend({
 		// 更新显示
 		this.numLabel.setString(this.numbtns[this.firstPic].num+this.calNum);
 		// cc.log("test:"+this.calStringArr[sender.calnum]);
-
+		this.addGuide(2);
 	},
 
 	showTip:function() {
@@ -523,7 +675,12 @@ var GameLayer = cc.Layer.extend({
 			result = "随机模式";
 		} else {
 			//result = "关卡:" + (this.guankaNum) +  " 难度系数:" + tempArr[0];
+			if(this.guankaNum==0)
+			result = "引导关";
+			else
 			result = "第" + (this.guankaNum) + "关";
+			
+			
 		}
 		this.startLabel.setString(result);
 		

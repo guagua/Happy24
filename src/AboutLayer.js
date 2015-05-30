@@ -37,7 +37,7 @@ var AboutLayer = cc.Layer.extend({
 		bgLayer2.addChild(menu,2);
 		
         //标题
-		var settitle= new cc.Sprite(res.about_title_png);
+		var settitle= new cc.Sprite("#about_title.png");
 		settitle.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height-settitle.getBoundingBox().height/2,
@@ -47,18 +47,27 @@ var AboutLayer = cc.Layer.extend({
 		bgLayer2.addChild(settitle,2);
 		
 		//白色底框
-		var white_bg = new cc.Scale9Sprite(res.dark_bg_png);
+		var white_bg = new cc.LayerColor(cc.color(221,221,221,255), 500, 750);
 		white_bg.attr({
 			x: bgLayer2.getBoundingBox().width/2,
 			y: bgLayer2.getBoundingBox().height*2.3/5,
 			anchorX: 0.5,
-			anchorY: 0.5,
-			width : 500,
-			height : 750 
+			anchorY: 0.5
 		});
-		bgLayer2.addChild(white_bg,2);
+		white_bg.ignoreAnchorPointForPosition(false);
+		bgLayer2.addChild(white_bg, 2);
+//		var white_bg = new cc.Scale9Sprite(res.dark_bg_png);
+//		white_bg.attr({
+//			x: bgLayer2.getBoundingBox().width/2,
+//			y: bgLayer2.getBoundingBox().height*2.3/5,
+//			anchorX: 0.5,
+//			anchorY: 0.5,
+//			width : 500,
+//			height : 750 
+//		});
+//		bgLayer2.addChild(white_bg,2);
 		
-		var logo = new cc.Sprite(res.logo_png);
+		var logo = new cc.Sprite("#logo.png");
 		logo.attr({
 			x: white_bg.getBoundingBox().width/2,
 			y: white_bg.getBoundingBox().height-10,
@@ -79,7 +88,7 @@ var AboutLayer = cc.Layer.extend({
 		});
 		white_bg.addChild(introLabel,1);
 		
-		var weixin = new cc.Sprite(res.weixin_png);
+		var weixin = new cc.Sprite("#weixin.png");
 		weixin.attr({
 			x: white_bg.getBoundingBox().width/2,
 			y: introLabel.y - introLabel._getHeight() - 90,
@@ -89,8 +98,8 @@ var AboutLayer = cc.Layer.extend({
 		white_bg.addChild(weixin,2);
 
 		var enterWeb = new cc.MenuItemImage(
-			res.enter_web_png,
-			res.enter_web_png,
+				"#guanwang.png",
+				"#guanwang2.png",
 			this.enterWebClick,this
 		);
 
@@ -102,7 +111,7 @@ var AboutLayer = cc.Layer.extend({
 		enterMenu.y = 0;	
 		white_bg.addChild(enterMenu,2);
 		
-		var line = new cc.Sprite(res.line_png);
+		var line = new cc.Sprite("#line.png");
 		line.attr({
 			x: white_bg.getBoundingBox().width/2,
 			y: enterWeb.y - enterWeb._getHeight() + 30,

@@ -49,15 +49,46 @@
 
 cc.game.onStart = function(){
     cc.view.adjustViewPort(true);
- 
-    if (cc.sys.isMobile){
-    	cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.FIXED_WIDTH);
-    }else{
-    	cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.SHOW_ALL);
-    }
-   
-    
-    //cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.FIXED_WIDTH);
+     var size=cc.winSize;
+
+//     
+//     if (cc.sys.isMobile)
+//     {
+//    	 if (cc.sys.browserType != null&&window.innerWidth/window.innerHeight<700/1100)	
+//    	cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.FIXED_WIDTH);
+//    	
+//    }else{
+//    	
+//    	cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.SHOW_ALL);
+//    }
+     
+     if (cc.sys.browserType != null)
+    	 {
+		  	 if (window.innerWidth/window.innerHeight<=700/1100)	
+		  	 {
+		  		 cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.FIXED_WIDTH);
+		
+		  	 }else
+		 	 {
+		  		cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.SHOW_ALL);
+		 	 } 
+    	 
+    	 }
+     else{
+    	 
+	    	 if (size.width/size.height<=700/1100)	
+	    	 {
+	    		 cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.FIXED_WIDTH);
+	
+	    	 }else
+	    	 {
+	    		 cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.SHOW_ALL);
+	    	 } 
+    	 	 
+     }
+     
+    // cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.FIXED_WIDTH);
+    // cc.view.setDesignResolutionSize(620,1104,cc.ResolutionPolicy.SHOW_ALL);
     
     cc.view.resizeWithBrowserSize(true);
     
@@ -65,9 +96,7 @@ cc.game.onStart = function(){
     //初始化部分值
    GV.getCurrentLevel();
     
-    
-    
-       
+
     //load resources
     cc.LoaderScene.preload(g_resources, function () {
     	cc.director.runScene(new GameInitScene());

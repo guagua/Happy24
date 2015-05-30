@@ -249,7 +249,7 @@ var initLevelNum = function () {
 			}
 		}
 	}
-	cc.log("total nums:%d", CU.levelNum.length);
+	//cc.log("total nums:%d", CU.levelNum.length);
 };
 
 var calHardByOp = function(opIndex) {

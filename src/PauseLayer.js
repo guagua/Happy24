@@ -200,6 +200,7 @@ var PauseLayer = cc.Layer.extend({
 	closeSetting:function () {
 		Sound.getInstance().playBtn();
 		this.setVisible(false);
+		this.y=-2000;
 		cc.eventManager.resumeTarget(this.getParent(),true);
 	},
 
